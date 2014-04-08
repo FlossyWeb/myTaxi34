@@ -99,6 +99,7 @@
 	
 		// PhoneGap est prêt
 		function onDeviceReady() {
+			document.addEventListener("backbutton", onBackKeyDown, false);
 			locateMe();
 		}
 	}
