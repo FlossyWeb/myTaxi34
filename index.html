@@ -90,6 +90,22 @@
 	
 	////////////////////////////////////////////////////////////
 	
+	// Checks App or Browser
+	app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 && document.URL.indexOf("localhost") != 7;
+	if ( app ) {
+		// PhoneGap application
+		// Attendre que PhoneGap soit prêt	    //
+		document.addEventListener("deviceready", onDeviceReady, false);
+	
+		// PhoneGap est prêt
+		function onDeviceReady() {
+			locateMe();
+		}
+	}
+	else {
+		app = false;
+	}
+	
 	$( '#infos' ).live( 'pagecreate',function(event){
 		var input = document.getElementById('addressInput');
 		/*
@@ -112,7 +128,7 @@
 		  map: "#map",
 		  location: "Montpellier, France"
 		});
-		locateMe();
+		if(!app) locateMe();
 		
         $("#search-box").hide("fast");
 		$("#next-box").show("medium");
