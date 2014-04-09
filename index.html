@@ -100,7 +100,19 @@
 		// PhoneGap est prêt
 		function onDeviceReady() {
 			document.addEventListener("backbutton", onBackKeyDown, false);
+			document.addEventListener("menubutton", onMenuKeyDown, false);
 			locateMe();
+		}
+		// GESTION DES BOUTONS MATERIEL
+		// Bouton retour
+		function onBackKeyDown() {
+			//history.back();
+			//changePage('#infos');
+			alert('Veuillez ne pas quitter myTaxi pendant la recheche de taxi disponibles');
+		}
+		// Bouton menu
+		function onMenuKeyDown() {
+			//changePage('#infos');
 		}
 	}
 	else {
