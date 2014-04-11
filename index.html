@@ -413,7 +413,7 @@
 		num_req = idcourse;
 		i = 0; // We need to make any numreq unique on that one !!
 		//$.post("https://ssl14.ovh.net/~taxibleu/server/app_dcvp_xml.php", { lat: rdvlat, lng: rdvlng, type: typecar, howmany: howMany, cb: cb, group: '1', dep: '', pass: 'true'}, function(xml){
-		$.post('https://ssl14.ovh.net/~taxibleu/server/app_dcvp_xml.php', {lat: rdvlat, lng: rdvlng, type: typecar, howmany: howMany, cb: cb, group: group, dep: '34'}, function(xml){
+		$.post('https://ssl14.ovh.net/~taxibleu/server/app_dcvp_xml.php', {lat: rdvlat, lng: rdvlng, type: typecar, howmany: howMany, cb: cb, group: group, dep: '34', pass: 'true'}, function(xml){
 			//alert('IN');
 			$(xml).find('marker').each(function(){
 				var name = $(this).attr('name');
@@ -623,7 +623,7 @@
                         <div id="results"></div>
                     </div>
                 </div>
-                <div data-role="popup" data-theme="a" id="rememberMe" data-dismissible="true" data-overlay-theme="b">
+                <div data-role="popup" data-theme="a" id="rememberMe" data-dismissible="true">
  					<a href="#infos" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
                    <div data-theme="a" data-role="header">
                         <p style="font-size:21px;text-align:center;"><b>
@@ -663,7 +663,7 @@
                     </div>
                     <div class="ui-content" role="main">
                         <div id="answer"></div>
-                        <input type="button" value="OK" onClick="goback('index.html')"/>
+                        <input type="button" value="OK" onClick="document.location.reload(true)"/>
                     </div>
                 </div>
             </div>
