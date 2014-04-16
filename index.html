@@ -190,12 +190,12 @@
 				var intent = ""; //leave empty for sending sms using default intent
 				var success = function () {
 					//alert('Message sent successfully');
-					$('smsReturn').empty().append('Message envoy&eacute; avec succ&egrave;s, Merci');
+					$('#smsReturn').empty().append('Message envoy&eacute; avec succ&egrave;s, Merci');
 					$( "#popSms" ).popup( "open", { positionTo: "window" } );
 				};
 				var error = function (e) {
 					//alert('Message Failed:' + e); 
-					$('smsReturn').empty().append('Probl&egrave;me lors de l&rsquo;envoi du message: ' + e);
+					$('#smsReturn').empty().append('Probl&egrave;me lors de l&rsquo;envoi du message: ' + e);
 					$( "#popSms" ).popup( "open", { positionTo: "window" } );
 				};
 				sms.send(number, message, intent, success, error);
