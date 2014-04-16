@@ -44,9 +44,10 @@
     </script>    
     <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
     <script src="phonegap.js"></script>
+    <script src="barcodescanner.js"></script>
+    <script src="ContactPicker.js"></script>
     <!-- 
     <script src="js/plugins/Calendar.js"></script>
-    <script src="barcodescanner.js"></script>
     <script src="PushNotification.js"></script>
     <script src="GAPlugin.js"></script>
     <script src="cdv-plugin-fb-connect.js"></script>
@@ -166,7 +167,8 @@
 	function share()
 	{
 		window.plugins.ContactPicker.chooseContact(function(contactInfo) {
-			alert('Partager avec' + contactInfo.displayName + " " + contactInfo.email);
+			//alert('Partager avec' + contactInfo.displayName + " " + contactInfo.email);
+			setTimeout(function(){('Partager avec' + contactInfo.displayName + " " + contactInfo.email);},500);
 		});
 	}
 	$( '#infos' ).live( 'pagecreate',function(event){
@@ -585,11 +587,11 @@
         <div data-role="panel" id="homepanel" data-position="left" data-display="reveal">
             <!-- panel content goes here -->
             <ul data-role="listview" data-inset="true" data-theme="b">
-              <li><a href="#infos" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
+              <li><a href="#infos" data-rel="close" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
               <li><a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Partager l&rsquo;app</b></a></li>
               <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
             </ul>
-            <a href="#home" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Fermer</a>
+            <a href="#infos" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Fermer</a>
         </div><!-- /panel -->
         <div data-role="header">
             <a href="#homepanel" id="panel_poper" class="ui-btn ui-btn-icon-left ui-icon-arrow-l">Menu</a>
