@@ -3,6 +3,9 @@ body {
 	padding: 0px;
 	background: #000 url(../visuels/bg.png) top left repeat-x;
 }
+.ui-overlay-b, .ui-page-theme-b, .ui-page-theme-b .ui-panel-wrapper, .ui-page-theme-b .ui-body-inherit {
+	background: #000 url(../visuels/bg.png) top left repeat-x;
+}
 p, h1, h2, h3, h4, h5, h6 {
 	margin: 0px;
 	padding: 0px;
@@ -77,17 +80,20 @@ em {
 	color: #F00;
 }
 ::-webkit-input-placeholder {
-   color: #FFF;
+   color: #333;
 }
 
 :-moz-placeholder { /* Firefox 18- */
-   color: #FFF;
+   color: #333;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
-   color: #FFF;
+   color: #333;
 }
 
 :-ms-input-placeholder {  
-   color: #FFF;
+   color: #333;
+}
+input[type=text], input[type=date], input[type=time] {
+	color: #000;
 }

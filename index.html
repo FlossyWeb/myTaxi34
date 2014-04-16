@@ -87,7 +87,12 @@
 	var regCell3 = $.localStorage.getItem('regCell3');
 	var dontReg = false;
 	var mobileMap = { 'center': '43.609, 3.88', 'zoom': 12 };
-	
+
+	// Scanner
+	var scanner;
+	// Detect wether it is an App or WebApp
+	var app;
+
 	////////////////////////////////////////////////////////////
 	
 	// Checks App or Browser
@@ -102,6 +107,7 @@
 			document.addEventListener("backbutton", onBackKeyDown, false);
 			document.addEventListener("menubutton", onMenuKeyDown, false);
 			locateMe();
+			scanner = cordova.require("cordova/plugin/BarcodeScanner");
 		}
 		// GESTION DES BOUTONS MATERIEL
 		// Bouton retour
@@ -118,7 +124,51 @@
 	else {
 		app = false;
 	}
-	
+	var scanSuccess = function (result) {
+		var textFormats = "QR_CODE DATA_MATRIX";
+		var productFormats = "UPC_E UPC_A EAN_8 EAN_13";
+		if (result.cancelled) { return; }
+		if (textFormats.match(result.format)) {                
+			var scanVal = result.text;
+			if (scanVal.indexOf("http") === 0) {
+				setTimeout(function() { 
+					//window.plugins.childBrowser.showWebPage(result.text, { showLocationBar: true }); 
+					window.open(result.text,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
+				}, 500);
+			} else {
+				navigator.notification.alert(
+						result.text,
+						function (){},
+						'Scan Value:',
+						'Done'
+					);
+			}
+		} else if (productFormats.match(result.format)) {
+			var searchUrl = "https://www.google.fr/#q=" + result.text;
+			setTimeout(function() { 
+				//window.plugins.childBrowser.showWebPage(searchUrl, { showLocationBar: true });
+				window.open(searchUrl,'_blank','location=yes,enableViewportScale=yes,closebuttoncaption=Fermer');
+			}, 500);
+		} else { alert("Format du scan: " + result.format + 
+				  " NON SUPPORTE. Valeur du scan: " + result.text);
+		}
+	}
+	function goScan ()
+	{
+		scanner.scan(
+			scanSuccess, 
+			function (error) {
+				alert("Scan Erreur: " + error);
+			}
+		);
+	}
+
+	function share()
+	{
+		window.plugins.ContactPicker.chooseContact(function(contactInfo) {
+			alert('Partager avec' + contactInfo.displayName + " " + contactInfo.email);
+		});
+	}
 	$( '#infos' ).live( 'pagecreate',function(event){
 		/*
 		var input = document.getElementById('addressInput');
@@ -523,12 +573,26 @@
     {
         $.mobile.pageContainer.pagecontainer("change", "#map_page", { transition: "slide"} );
     }
-	
+	/*
+	$('#infos').live("swiperight", function() {
+		$("#panel_poper").trigger('click');
+	});
+	*/
     </script>
     </head>
     <body style="margin:0px; padding:0px;">
     <div data-role="page" data-theme="b" style="background: #000 url(visuels/bg.png) top left repeat-x;" id="infos">
+        <div data-role="panel" id="homepanel" data-position="left" data-display="reveal">
+            <!-- panel content goes here -->
+            <ul data-role="listview" data-inset="true" data-theme="b">
+              <li><a href="#infos" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
+              <li><a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Partager l&rsquo;app</b></a></li>
+              <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
+            </ul>
+            <a href="#home" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Fermer</a>
+        </div><!-- /panel -->
         <div data-role="header">
+            <a href="#homepanel" id="panel_poper" class="ui-btn ui-btn-icon-left ui-icon-arrow-l">Menu</a>
         <!-- 
             <a href="home.html" data-theme="a" data-icon="back" data-iconpos="left" data-role="button" data-transition="slide" data-ajax="false">
                 <h1><b>Retour</b></h1>
@@ -569,7 +633,7 @@
                 </table>
                 <p style="font-size:small;"><em>*</em> Ces informations sont obligatoires</p>
                 <label for="howMany">Nombre de passagers :</label>
-                <input name="howMany" id="howMany" min="1" max="8" value="1" data-show-value="true" data-popup-enabled="true" type="range">
+                <input name="howMany" id="howMany" min="1" max="8" value="1" data-theme="a" data-show-value="true" data-popup-enabled="true" type="range">
                 <p id="datelabel"><b>Date et heure du RDV si r&eacute;servation :</b></p>
                 <span style="display:inline-block;width: 48%;">
                     <input type="date" id="date" placeholder="Date" data-clear-btn="true" data-inline="true" value=""/>
