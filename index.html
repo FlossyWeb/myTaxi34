@@ -274,7 +274,12 @@
 		$('#regLinks').append('</fieldset>');
 	});
 	function locateMe() {
-		navigator.geolocation.getCurrentPosition(codeLatLng, showError,{enableHighAccuracy:true, maximumAge:0});
+		if (navigator.userAgent.toLowerCase().match(/android/)) {
+			navigator.geolocation.getCurrentPosition(codeLatLng, showError,{enableHighAccuracy:false, maximumAge:0});
+		}
+		else {
+			navigator.geolocation.getCurrentPosition(codeLatLng, showError,{enableHighAccuracy:true, maximumAge:0});
+		}
 	}
 	function codeLatLng(position) {
 		var geocoder = new google.maps.Geocoder();
