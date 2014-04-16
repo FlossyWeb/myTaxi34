@@ -164,11 +164,17 @@
 		);
 	}
 
-	function share()
+	function Share()
 	{
 		window.plugins.ContactPicker.chooseContact(function(contactInfo) {
 			//alert('Partager avec' + contactInfo.displayName + " " + contactInfo.email);
-			setTimeout(function(){('Partager avec' + contactInfo.displayName + " " + contactInfo.email);},500);
+			//setTimeout(function(){('Partager avec' + contactInfo.displayName + " " + contactInfo.email);},500);
+			//to get all mobile number
+			for (var i = 0; i < contactInfo.phones.mobileNumber.length; i++) {
+				 //alert(contactInfo.phones.mobileNumber[i]);
+				 $('#results').empty().append(contactInfo.phones.mobileNumber[i]);
+			};
+			alert(contactInfo.displayName + " " + contactInfo.phones.mobileNumber[0] + " " + contactInfo.email);
 		});
 	}
 	$( '#infos' ).live( 'pagecreate',function(event){
@@ -678,6 +684,7 @@
                 <hr>
                 <a class="portal" style="width:90%;" href="taxipad_portal.php" target="_top">Retour &agrave; l&rsquo;Accueil</a>
                 -->
+                <div id="results"></div>
                 <div data-role="popup" data-theme="a" id="errorPop" data-dismissible="true" data-overlay-theme="b">
 					<a href="#infos" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
                     <div data-theme="a" data-role="header">
