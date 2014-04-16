@@ -45,7 +45,7 @@
     <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
     <script src="phonegap.js"></script>
     <script src="barcodescanner.js"></script>
-    <script src="ContactPicker.js"></script>
+    <script src="contactNumberPicker.js"></script>
     <!-- 
     <script src="js/plugins/Calendar.js"></script>
     <script src="PushNotification.js"></script>
@@ -166,8 +166,8 @@
 
 	function Share()
 	{
-		window.plugins.ContactPicker.chooseContact(function(contactInfo) {
-			alert('Partager avec' + contactInfo.displayName + " " + contactInfo.email);
+		//window.plugins.ContactPicker.chooseContact(function(contactInfo) {
+			//alert('Partager avec' + contactInfo.displayName + " " + contactInfo.email);
 			//setTimeout(function(){('Partager avec' + contactInfo.displayName + " " + contactInfo.email);},500);
 			//to get all mobile number
 			/*
@@ -177,7 +177,15 @@
 			};
 			alert(contactInfo.displayName + " " + contactInfo.phones.mobileNumber[0] + " " + contactInfo.email);
 			*/
-		});
+		//});
+		// Show Contact Picker
+		var successCallback = function(result){
+			setTimeout(function(){alert(result.name + " " + result.phoneNumber);},0);
+		};
+		var failedCallback = function(result){
+			setTimeout(function(){alert(result);},0);
+		}
+		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 	}
 	$( '#infos' ).live( 'pagecreate',function(event){
 		/*
