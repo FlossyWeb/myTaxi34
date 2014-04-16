@@ -108,6 +108,7 @@
 		function onDeviceReady() {
 			document.addEventListener("backbutton", onBackKeyDown, false);
 			document.addEventListener("menubutton", onMenuKeyDown, false);
+			StatusBar.overlaysWebView(false);
 			locateMe();
 			scanner = cordova.require("cordova/plugin/BarcodeScanner");
 		}
