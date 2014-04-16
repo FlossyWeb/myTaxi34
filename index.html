@@ -167,14 +167,16 @@
 	function Share()
 	{
 		window.plugins.ContactPicker.chooseContact(function(contactInfo) {
-			//alert('Partager avec' + contactInfo.displayName + " " + contactInfo.email);
+			alert('Partager avec' + contactInfo.displayName + " " + contactInfo.email);
 			//setTimeout(function(){('Partager avec' + contactInfo.displayName + " " + contactInfo.email);},500);
 			//to get all mobile number
+			/*
 			for (var i = 0; i < contactInfo.phones.mobileNumber.length; i++) {
 				 //alert(contactInfo.phones.mobileNumber[i]);
 				 $('#results').empty().append(contactInfo.phones.mobileNumber[i]);
 			};
 			alert(contactInfo.displayName + " " + contactInfo.phones.mobileNumber[0] + " " + contactInfo.email);
+			*/
 		});
 	}
 	$( '#infos' ).live( 'pagecreate',function(event){
