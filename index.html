@@ -109,7 +109,9 @@
 			document.addEventListener("backbutton", onBackKeyDown, false);
 			document.addEventListener("menubutton", onMenuKeyDown, false);
 			StatusBar.overlaysWebView(false);
-			locateMe();
+			setTimeout(function() { 
+				locateMe();
+			}, 1000);
 			scanner = cordova.require("cordova/plugin/BarcodeScanner");
 		}
 		// GESTION DES BOUTONS MATERIEL
