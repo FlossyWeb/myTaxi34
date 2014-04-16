@@ -46,6 +46,7 @@
     <script src="phonegap.js"></script>
     <script src="barcodescanner.js"></script>
     <script src="contactNumberPicker.js"></script>
+    <script src="sms.js"></script>
     <!-- 
     <script src="js/plugins/Calendar.js"></script>
     <script src="PushNotification.js"></script>
@@ -180,7 +181,15 @@
 		//});
 		// Show Contact Picker
 		var successCallbackPick = function(result){
-			setTimeout(function(){alert(result.name + " " + result.phoneNumber);},500);
+			setTimeout(function(){
+				//alert(result.name + " " + result.phoneNumber);
+				var number = result.phoneNumber;
+				var message = "Téléchargez l'app myTaxi 34 en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi&dep=34";
+				var intent = ""; //leave empty for sending sms using default intent
+				var success = function () { alert('Message sent successfully'); };
+				var error = function (e) { alert('Message Failed:' + e); };
+				sms.send(number, message, intent, success, error);
+			},500);
 		};
 		var failedCallbackPick = function(result){
 			setTimeout(function(){alert(result);},500);
