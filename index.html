@@ -179,11 +179,11 @@
 			*/
 		//});
 		// Show Contact Picker
-		var successCallback = function(result){
-			setTimeout(function(){alert(result.name + " " + result.phoneNumber);},0);
+		var successCallbackPick = function(result){
+			setTimeout(function(){alert(result.name + " " + result.phoneNumber);},500);
 		};
-		var failedCallback = function(result){
-			setTimeout(function(){alert(result);},0);
+		var failedCallbackPick = function(result){
+			setTimeout(function(){alert(result);},500);
 		}
 		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 	}
