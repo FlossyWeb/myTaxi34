@@ -207,6 +207,28 @@
 		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 	}
 	
+	function getContact()
+	{
+		var successCallbackPick = function(result){
+			setTimeout(function(){
+				//alert(result.name + " " + result.phoneNumber);
+				var nameContact = result.name;
+				var number = result.phoneNumber;
+				var currentName = $('#Accurate').val();
+				if (currentName != '') {
+					$('#Accurate').val(nameContact);
+				}
+				$('#cellular').val(number);
+				$("#next-box").hide("fast");
+				$("#search-box").show("medium");
+			},500);
+		};
+		var failedCallbackPick = function(result){
+			setTimeout(function(){alert(result);},500);
+		}
+		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
+	}
+	
 	$( '#infos' ).live( 'pagecreate',function(event){
 		/*
 		var input = document.getElementById('addressInput');
@@ -671,6 +693,8 @@
                     </td><td><a href="#rememberMe" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-b ui-icon-edit ui-shadow-icon ui-btn-icon-notext ui-corner-all"></a></td></tr>
                 	<tr><td>
                         <input type="tel" id="cellular" data-clear-btn="true" class="mustHave" size="20" placeholder="Tel *"/>
+                    </td><td>
+                        <input type="button" data-icon="heart" data-iconpos="notext" value="Contact" onClick="getContact()"/>
                     </td></tr>
                     </tbody>
                 </table>
