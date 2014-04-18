@@ -692,11 +692,13 @@
                 <input type="hidden" id="DestAddress" size="10" value="DESTINATION"/>
                 	<tr><td>
                         <input type="text" id="Accurate" data-clear-btn="true" class="mustHave" size="32" placeholder="Nom *"/>
-                    </td><td><a href="#rememberMe" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-b ui-icon-edit ui-shadow-icon ui-btn-icon-notext ui-corner-all"></a></td></tr>
+                    </td><td>
+                        <input type="button" data-icon="edit" data-iconpos="notext" value="Contact" onClick="getContact()"/>
+                    </td></tr>
                 	<tr><td>
                         <input type="tel" id="cellular" data-clear-btn="true" class="mustHave" size="20" placeholder="Tel *"/>
                     </td><td>
-                        <input type="button" data-icon="heart" data-iconpos="notext" value="Contact" onClick="getContact()"/>
+                        <a href="#rememberMe" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-b ui-icon-heart ui-shadow-icon ui-btn-icon-notext ui-corner-all"></a>
                     </td></tr>
                     </tbody>
                 </table>
