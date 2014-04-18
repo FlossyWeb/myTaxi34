@@ -94,6 +94,6 @@ em {
 :-ms-input-placeholder {  
    color: #333;
 }
-input[type=text], input[type=date], input[type=time] {
+input[type=text], input[type=tel], input[type=date], input[type=time] {
 	color: #000;
 }

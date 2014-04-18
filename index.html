@@ -202,7 +202,9 @@
 			},500);
 		};
 		var failedCallbackPick = function(result){
-			setTimeout(function(){alert(result);},500);
+			setTimeout(function(){
+				//alert(result);
+			},500);
 		}
 		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 	}
@@ -215,16 +217,16 @@
 				var nameContact = result.name;
 				var number = result.phoneNumber;
 				var currentName = $('#Accurate').val();
-				if (currentName != '') {
-					$('#Accurate').val(nameContact);
-				}
+				$('#Accurate').val(nameContact);
 				$('#cellular').val(number);
 				$("#next-box").hide("fast");
 				$("#search-box").show("medium");
 			},500);
 		};
 		var failedCallbackPick = function(result){
-			setTimeout(function(){alert(result);},500);
+			setTimeout(function(){
+				//alert(result);
+			},500);
 		}
 		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 	}
@@ -689,7 +691,7 @@
                     </td></tr>
                 <input type="hidden" id="DestAddress" size="10" value="DESTINATION"/>
                 	<tr><td>
-                        <input type="text" id="Accurate" data-clear-btn="true" class="mustHave" size="26" placeholder="Nom *"/>
+                        <input type="text" id="Accurate" data-clear-btn="true" class="mustHave" size="32" placeholder="Nom *"/>
                     </td><td><a href="#rememberMe" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-b ui-icon-edit ui-shadow-icon ui-btn-icon-notext ui-corner-all"></a></td></tr>
                 	<tr><td>
                         <input type="tel" id="cellular" data-clear-btn="true" class="mustHave" size="20" placeholder="Tel *"/>
