@@ -418,7 +418,7 @@
 		
         // Auto Click and deliver courses to cabs
         $('#deliver').click(function () {
-                                      
+                                 
             check_answer();
                         
 			var index = 0;
@@ -555,7 +555,7 @@
 				$('#dblinks').append($('<input class="cabs" id="' + i + '" type="hidden" onclick="sendJob(\''+ url +'\')" />'));
 			});
 			num_req = num_req+1;
-			i = i+1;
+			i = parseInt(i,10)+1;
 			url = 'taxi=0000&tel=0000000000&idcourse=' + idcourse + '&num_req=' + num_req + '&rdvpoint=' + rdvpoint + '&lat=' + rdvlat + '&lng=' + rdvlng + '&comments=' + comments + '&cell=' + cell + '&when=' + when + '&date=' + date + '&operator=' + operator + '&dep=34&group=1&ack=0&db=1';
 			url = url.replace(/'/g, "&rsquo;");
 			// Sends Auction Request to TaxiMedia Server
@@ -748,7 +748,7 @@
                 <a class="portal" style="width:90%;" href="taxipad_portal.php" target="_top">Retour &agrave; l&rsquo;Accueil</a>
                 -->
                 <div id="results"></div>
-                <div data-role="popup" data-theme="a" id="errorPop" data-dismissible="true" data-overlay-theme="b">
+                <div data-role="popup" data-theme="a" id="errorPop" data-dismissible="true">
 					<a href="#infos" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
                     <div data-theme="a" data-role="header">
                         <h1>
@@ -768,17 +768,6 @@
                     </div>
                     <div class="ui-content" role="main">
                         <div id="regLinks"></div>
-                    </div>
-                </div>
-                <div data-role="popup" data-theme="b" id="popSms" data-dismissible="true">
- 					<a href="#infos" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
-                   <div data-theme="a" data-role="header">
-                        <p style="font-size:21px;text-align:center;"><b>
-                            Partage SMS
-                        </b></p>
-                    </div>
-                    <div class="ui-content" role="main">
-                        <div id="smsReturn"></div>
                     </div>
                 </div>
             </div>
