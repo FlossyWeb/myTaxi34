@@ -47,6 +47,8 @@
     <script src="barcodescanner.js"></script>
     <script src="contactNumberPicker.js"></script>
     <script src="sms.js"></script>
+    <script src="cdv-plugin-fb-connect.js"></script>
+    <script src="facebook-js-sdk.js"></script>
     <!-- 
     <script src="js/plugins/Calendar.js"></script>
     <script src="PushNotification.js"></script>
@@ -97,6 +99,10 @@
 
 	////////////////////////////////////////////////////////////
 	
+	 <!-- These are the notifications that are displayed to the user through pop-ups if the above JS files does not exist in the same directory-->
+	if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
+	if (typeof CDV == 'undefined') alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
+	if (typeof FB == 'undefined') alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
 	// Checks App or Browser
 	app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 && document.URL.indexOf("localhost") != 7;
 	if ( app ) {
@@ -113,6 +119,11 @@
 				locateMe();
 			}, 1000);
 			scanner = cordova.require("cordova/plugin/BarcodeScanner");
+			try {
+				FB.init({ appId: "1488204401415966", nativeInterface: CDV.FB, useCachedDialogs: false });
+			} catch (e) {
+				alert(e);
+			}
 		}
 		// GESTION DES BOUTONS MATERIEL
 		// Bouton retour
@@ -229,6 +240,16 @@
 			},500);
 		}
 		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
+	}
+	
+	function login() {
+		FB.login(function(response) {
+			if (response.status === 'connected') {
+				alert('logged in');
+			} else {
+				alert('not logged in');
+			}
+		},{ scope: "email" });
 	}
 	
 	$( '#infos' ).live( 'pagecreate',function(event){
@@ -655,6 +676,7 @@
               <li><a href="#infos" data-rel="close" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
               <li><a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Partager l&rsquo;app</b></a></li>
               <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
+              <li><button class="ui-btn ui-btn-icon-left ui-icon-user" onclick="login()">Login Facebook</button></li>
             </ul>
             <a href="#infos" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Fermer</a>
         </div><!-- /panel -->
