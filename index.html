@@ -254,7 +254,7 @@
 		FB.login(function(response) {
 			if (response.status === 'connected') {
 				 FB.api('/me', function(response) {
-				   document.getElementById('data').innerHTML = "Good to see you, fr&egrave;re : " + response.name + "."+response.email + " - "+response.age_range + " - bDay = "+response.birthday + " - "+response.gender + " - "+response.work + " - "+response.website+ " - "+response.website + " - "+response.quotes;
+				   document.getElementById('data').innerHTML = "Good to see you, fr&egrave;re : " + response.name + "."+response.email + " - "+response.age_range + " - bDay = "+response.birthday + " - "+response.gender + " - "+response.work + " - "+response.website+ " - "+response.link + " - "+response.quotes;
 				 });
 	 			//alert('logged in');
 			} else {
