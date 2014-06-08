@@ -121,9 +121,16 @@
 			scanner = cordova.require("cordova/plugin/BarcodeScanner");
 			try {
 				FB.init({ appId: "1488204401415966", nativeInterface: CDV.FB, useCachedDialogs: false });
+				document.getElementById('data').innerHTML = "";
+				    console.log('Welcome!  Fetching your information.... ');
 			} catch (e) {
 				alert(e);
 			}
+			FB.api('/me', function(response) {
+			  console.log('Successful login for: ' + response.name);
+			  document.getElementById('data').innerHTML =
+				'Thanks for logging in, ' + response.name + '!';
+			});
 		}
 		// GESTION DES BOUTONS MATERIEL
 		// Bouton retour
@@ -676,7 +683,7 @@
               <li><a href="#infos" data-rel="close" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
               <li><a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Partager l&rsquo;app</b></a></li>
               <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
-              <li><button class="ui-btn ui-btn-icon-left ui-icon-user" onclick="login()">Login Facebook</button></li>
+              <li><a href="#subscription" class="ui-btn ui-btn-icon-left ui-icon-user" onclick="login()">S&rsquo;Identifier</a></li>
             </ul>
             <a href="#infos" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Fermer</a>
         </div><!-- /panel -->
@@ -824,6 +831,13 @@
                         <input type="button" value="OK" onClick="document.location.reload(true)"/>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div data-role="page" data-theme="b" id="subscription" style="background: #000 url(visuels/bg.png) top left repeat-x;">
+        <div class="ui-content" role="main">
+            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
+                <div id="data">loading ...</div>
             </div>
         </div>
     </div>
