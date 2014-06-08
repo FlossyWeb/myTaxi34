@@ -121,18 +121,7 @@
 			scanner = cordova.require("cordova/plugin/BarcodeScanner");
 			try {
 				FB.init({ appId: "1488204401415966", nativeInterface: CDV.FB, useCachedDialogs: false });
-				document.getElementById('data').innerHTML = "";
-				var fbLoginSuccess = function (userData) {
-					facebookConnectPlugin.api('/me/friends?fields=picture,name', ["basic_info", "user_friends"],
-						function (result) {
-							alert("Result: " + JSON.stringify(result));
-						}, 
-						function (error) { 
-							alert("Failed: " + error);
-						}
-					);
-				
-				}
+				//document.getElementById('data').innerHTML = "";
 			} catch (e) {
 				alert(e);
 			}
@@ -264,7 +253,10 @@
 	function login() {
 		FB.login(function(response) {
 			if (response.status === 'connected') {
-				alert('logged in');
+				 FB.api('/me', function(response) {
+				   document.getElementById('data').innerHTML = "Good to see you, " + response.name + ".";
+				 });
+	 			//alert('logged in');
 			} else {
 				alert('not logged in');
 			}
