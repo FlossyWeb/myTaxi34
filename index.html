@@ -89,6 +89,10 @@
 	var regCell2 = $.localStorage.getItem('regCell2');
 	var regName3 = $.localStorage.getItem('regName3');
 	var regCell3 = $.localStorage.getItem('regCell3');
+	var registeredUser = $.localStorage.getItem('registeredUser');
+	var nom = $.localStorage.getItem('nom');
+	var tel = $.localStorage.getItem('tel');
+	var email = $.localStorage.getItem('email');
 	var dontReg = false;
 	var mobileMap = { 'center': '43.609, 3.88', 'zoom': 12 };
 
@@ -115,6 +119,10 @@
 			document.addEventListener("backbutton", onBackKeyDown, false);
 			document.addEventListener("menubutton", onMenuKeyDown, false);
 			StatusBar.overlaysWebView(false);
+			if($.localStorage.getItem('registeredUser') == 1)
+			{
+				$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
+			}
 			setTimeout(function() { 
 				locateMe();
 			}, 1000);
@@ -125,13 +133,6 @@
 			} catch (e) {
 				alert(e);
 			}
-			/*
-			FB.api('/me', function(response) {
-			  console.log('Successful login for: ' + response.name);
-			  document.getElementById('data').innerHTML =
-				'Thanks for logging in, ' + response.name + '!';
-			});
-			*/
 		}
 		// GESTION DES BOUTONS MATERIEL
 		// Bouton retour
@@ -189,18 +190,6 @@
 
 	function Share()
 	{
-		//window.plugins.ContactPicker.chooseContact(function(contactInfo) {
-			//alert('Partager avec' + contactInfo.displayName + " " + contactInfo.email);
-			//setTimeout(function(){('Partager avec' + contactInfo.displayName + " " + contactInfo.email);},500);
-			//to get all mobile number
-			/*
-			for (var i = 0; i < contactInfo.phones.mobileNumber.length; i++) {
-				 //alert(contactInfo.phones.mobileNumber[i]);
-				 $('#results').empty().append(contactInfo.phones.mobileNumber[i]);
-			};
-			alert(contactInfo.displayName + " " + contactInfo.phones.mobileNumber[0] + " " + contactInfo.email);
-			*/
-		//});
 		var successCallbackPick = function(result){
 			setTimeout(function(){
 				//alert(result.name + " " + result.phoneNumber);
@@ -250,37 +239,71 @@
 		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 	}
 	
-	function login() {
+	function fbLogin() {
 		FB.login(function(response) {
 			if (response.status === 'connected') {
 				 FB.api('/me', function(response) {
-				   //document.getElementById('data').innerHTML = "Good to see you, fr&egrave;re : " + response.name + "."+response.email + " - "+response.age_range + " - bDay = "+response.birthday + " - "+response.gender + " - "+response.work + " - "+response.website+ " - "+response.link + " - "+response.quotes;
-				   document.getElementById('data').innerHTML = "Good to see you, fr&egrave;re : " + response.name + "."+response.email;
+					//document.getElementById('data').innerHTML = "Good to see you, fr&egrave;re : " + response.name + "."+response.email + " - "+response.age_range + " - bDay = "+response.birthday + " - "+response.gender + " - "+response.work + " - "+response.website+ " - "+response.link + " - "+response.quotes;
+					$.localStorage.setItem('nom', response.name);
+					$.localStorage.setItem('email', response.email);
+					if($.localStorage.getItem('registeredUser') == 1)
+					{
+						$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
+					}
+					else {
+						//document.getElementById('data').innerHTML = "Good to see you, fr&egrave;re : " + response.name + "."+response.email;
+						$('#subName').val(response.name);
+						$('#subMail').val(response.email);
+						$.mobile.pageContainer.pagecontainer("change", "#subscription", { transition: "slide"} );
+					}
 				 });
-	 			//alert('logged in');
+				//alert('logged in');
 			} else {
-				alert('not logged in');
+				alert('ECHEC IDENTIFICATION');
 			}
 		},{ scope: "email" });
 	}
+	function login() {
+		var id = $('#login').val();
+		var pwd = $('#pwd').val();
+		$.post("https://ssl14.ovh.net/~taxibleu/movin/login_app.php", { id: id, pwd: pwd}, function(data) {
+			$.localStorage.setItem('nom', data.name);
+			$.localStorage.setItem('email', data.email);
+			$.localStorage.setItem('tel', data.tel);
+			$.localStorage.setItem('registeredUser', 1);
+			if (data.badid)
+			{
+				display = '<p style="color:red;"><b>Les identifiant et mot de passe fournis ne sont pas corrects.</b></p>';
+			}
+			$("#loginReturns").empty().append(display);
+			if(data.pass)
+			{ // IDENTIFIED SO GETS IN...
+				$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
+			}
+		}, "json");
+	}
+	function subscribe() {
+		var nom = $('#subName').val();
+		var tel = $('#subTel').val();
+		var mail = $('#subMail').val();
+		$.post("https://ssl14.ovh.net/~taxibleu/movin/register_app.php", { nom: nom, tel: tel, mail: mail}, function(data) {
+			$.localStorage.setItem('nom', data.name);
+			$.localStorage.setItem('email', data.email);
+			$.localStorage.setItem('tel', data.tel);
+			$.localStorage.setItem('registeredUser', 1);
+			if (data.badid)
+			{
+				display = '<p style="color:red;"><b>Les identifiant et mot de passe fournis ne sont pas corrects.</b></p>';
+			}
+			$("#data").empty().append(display);
+			if(data.pass)
+			{ // IDENTIFIED SO GETS IN...
+				$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
+			}
+		}, "json");
+	}
 	
 	$( '#infos' ).live( 'pagecreate',function(event){
-		/*
-		var input = document.getElementById('addressInput');
-		var latLng = new google.maps.LatLng(43.298977, 5.386320);
-		var radius = 100000;// meters
-		var circle = new google.maps.Circle({center: latLng, radius: radius});
-		var defaultBounds= circle.getBounds(); 
-		var options = {
-			bounds: defaultBounds,
-			componentRestrictions: {country: 'fr'}
-		};
-		var autocomplete = new google.maps.places.Autocomplete(input, options);
-		$("#addressInput").geocomplete({
-		  map: "#map",
-		  location: "Marseille, France"
-		});
-		*/
 		
 		$("#addressInput").geocomplete({
 		  map: "#map",
@@ -681,6 +704,24 @@
     </script>
     </head>
     <body style="margin:0px; padding:0px;">
+    <div data-role="page" data-theme="b" style="background: #000 url(visuels/bg.png) top left repeat-x;" id="connect">
+        <div class="ui-content" role="main">
+            <center>
+            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; margin-top:1em; display:block;">
+                <img src="visuels/logo.png" width="60%" style="margin-bottom:-0.6em; max-width:252px"/>
+                <input type="tel" id="login" data-clear-btn="true" size="40" placeholder="Identifiant" width="90%"/>
+                <input type="password" id="pwd" data-clear-btn="true" size="40" placeholder="Mot de passe" width="90%"/>
+                <div id="loginReturns"></div>
+                <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="login()">Connexion</button>
+                <a href="#subscription" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-user">Nouvelle Inscription</a>
+                <p style="font-size:small;"><a href="#" onClick="forgottenPwd();">Mot de passe oubli&eacute;</a></p>
+            </div>
+            </center>
+        </div>
+        <div data-role="footer" id="footer_con" data-position="fixed">
+            <center><input type="image" onClick="fbLogin()" src="visuels/FBconnect.png" width="90%"/></center>
+        </div>
+    </div>
     <div data-role="page" data-theme="b" style="background: #000 url(visuels/bg.png) top left repeat-x;" id="infos">
         <div data-role="panel" id="homepanel" data-position="left" data-display="reveal">
             <!-- panel content goes here -->
@@ -688,18 +729,12 @@
               <li><a href="#infos" data-rel="close" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
               <li><a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Partager l&rsquo;app</b></a></li>
               <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
-              <li><a href="#subscription" class="ui-btn ui-btn-icon-left ui-icon-user" onclick="login()">S&rsquo;Identifier</a></li>
+              <!-- <li><a href="#subscription" class="ui-btn ui-btn-icon-left ui-icon-user" onclick="fbLogin()">S&rsquo;Identifier</a></li> -->
             </ul>
             <a href="#infos" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Fermer</a>
         </div><!-- /panel -->
         <div data-role="header">
             <a href="#homepanel" id="panel_poper" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-arrow-l"><p style="font-size:16px"><b>Menu</b></p></a>
-        <!-- 
-            <a href="home.html" data-theme="a" data-icon="back" data-iconpos="left" data-role="button" data-transition="slide" data-ajax="false">
-                <h1><b>Retour</b></h1>
-            </a>
-            <a href="tel:+33491929292" class="ui-btn ui-btn-b ui-shadow ui-corner-all ui-btn-icon-left ui-icon-phone"><b> Appeler le 04 91 92 92 92 </b></a> 
-        -->
         </div>
         <div class="ui-content" role="main">
             <center>
@@ -842,7 +877,11 @@
     <div data-role="page" data-theme="b" id="subscription" style="background: #000 url(visuels/bg.png) top left repeat-x;">
         <div class="ui-content" role="main">
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
-                <div id="data">loading ...</div>
+                <input type="text" id="subName" data-clear-btn="true" size="40" placeholder="Mot de passe" width="90%"/>
+                <input type="tel" id="subTel" data-clear-btn="true" size="40" placeholder="Tel (Sans espace SVP)" width="90%"/>
+                <input type="email" id="subMail" data-clear-btn="true" size="40" placeholder="Identifiant" width="90%"/>
+                <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="subscribe()">Inscription</button>
+                <div id="data"></div>
             </div>
         </div>
     </div>
