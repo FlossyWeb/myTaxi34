@@ -267,7 +267,7 @@
 		var id = $('#login').val();
 		var pwd = $('#pwd').val();
 		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/login_app.php", { id: id, pwd: pwd}, function(data) {
-			$.localStorage.setItem('nom', data.name);
+			$.localStorage.setItem('nom', data.nom);
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('tel', data.tel);
 			$.localStorage.setItem('registeredUser', 1);
@@ -287,7 +287,7 @@
 		var tel = $('#subTel').val();
 		var email = $('#subMail').val();
 		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/register_app.php", { nom: nom, tel: tel, email: email}, function(data) {
-			$.localStorage.setItem('nom', data.name);
+			$.localStorage.setItem('nom', data.nom);
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('tel', data.tel);
 			$.localStorage.setItem('registeredUser', 1);
@@ -354,23 +354,7 @@
                 $("#next-box").show("medium");
             }
         }, 1000);
-		/*
-        $(".mustHave").change(function () {
-            var name_filled = document.getElementById('Accurate').value;
-            var cell_filled = document.getElementById('cellular').value;
-            
-            if ((cell_filled != '') && (name_filled != ''))
-            {
-                $("#next-box").hide("fast");
-                $("#search-box").show("medium");
-            }
-            else
-            {
-                $("#search-box").hide("fast");
-                $("#next-box").show("medium");
-            }
-        });
-		*/
+		
 		$('#regLinks').append('<fieldset data-role="controlgroup"><legend>Derni&egrave;res informations saisies:</legend>');
 		for(n=1;n<4;n++) {
 			if(($.localStorage.getItem('regName'+n) != null) && ($.localStorage.getItem('regCell'+n) != null)) {
@@ -911,13 +895,16 @@
             <center>
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
                 <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
-                <input type="text" id="subName" data-clear-btn="true" size="40" placeholder="Mot de passe"/>
+                <input type="text" id="subName" data-clear-btn="true" size="40" placeholder="Nom"/>
+                <input type="email" id="subMail" data-clear-btn="true" size="40" placeholder="Email"/>
                 <input type="tel" id="subTel" data-clear-btn="true" size="40" placeholder="Tel (Sans espace SVP)"/>
-                <input type="email" id="subMail" data-clear-btn="true" size="40" placeholder="Identifiant"/>
                 <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="subscribe()">Inscription</button>
                 <div id="data"></div>
             </div>
             </center>
+        </div>
+        <div data-role="footer" id="footer_sub" data-position="fixed">
+            <center><input type="image" onClick="fbLogin()" src="visuels/FBconnect.png" width="90%"/></center>
         </div>
     </div>
 	</body>
