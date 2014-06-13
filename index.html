@@ -104,9 +104,9 @@
 	////////////////////////////////////////////////////////////
 	
 	 <!-- These are the notifications that are displayed to the user through pop-ups if the above JS files does not exist in the same directory-->
-	if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
-	if (typeof CDV == 'undefined') alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
-	if (typeof FB == 'undefined') alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
+	//if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
+	//if (typeof CDV == 'undefined') alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
+	//if (typeof FB == 'undefined') alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
 	// Checks App or Browser
 	app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 && document.URL.indexOf("localhost") != 7;
 	if ( app ) {
@@ -285,8 +285,8 @@
 	function subscribe() {
 		var nom = $('#subName').val();
 		var tel = $('#subTel').val();
-		var mail = $('#subMail').val();
-		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/register_app.php", { nom: nom, tel: tel, mail: mail}, function(data) {
+		var email = $('#subMail').val();
+		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/register_app.php", { nom: nom, tel: tel, email: email}, function(data) {
 			$.localStorage.setItem('nom', data.name);
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('tel', data.tel);
@@ -307,6 +307,27 @@
 			$("#data").empty().append(display);
 		}, "json");
 	}
+	function forgottenPwd() {
+		var login = $('#forgotTel').val();
+		var mail = $('#forgotMail').val();
+		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/forget_app.php", { login: login, mail: mail}, function(data) {
+			var display = '';
+			if (data.sent)
+			{
+				display = '<p><b>Voici les informations d&rsquo;identification qui vous permettront d&rsquo;acc&egrave;der &agrave; votre compte :<br><span style="color:#09F;">Identifiant = ' + data.tel + '<br>Mot de passe = ' + data.pwd + '</span><br>Vous les recevrez dans quelques instants &agrave; cet email : <span style="color:#09F;">' + data.email + '</span>, merci.<br></b></p>';
+			}
+			else {
+				display = '<p style="color:red;"><b>Nous ne pouvons divulguer vos informations personnelles car l&rsquo;identifiant ou l&rsquo;adresse mail fourni ne figure pas dans notre base de donn&eacute;e.</b></p>' + data.tel + ' - ' + data.email;
+			}
+			$("#fogotReturns").empty().append(display);
+		}, "json");
+	}
+	
+	$( '#connect' ).live( 'pagecreate',function(event){
+		$('#displayForgot').click(function (){
+			$('#forgotForm').slideToggle();
+		});
+	});
 	
 	$( '#infos' ).live( 'pagecreate',function(event){
 		
@@ -713,13 +734,19 @@
         <div class="ui-content" role="main">
             <center>
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; margin-top:1em; display:block;">
-                <img src="visuels/logo.png" width="60%" style="margin-bottom:-0.6em; max-width:252px"/>
-                <input type="tel" id="login" data-clear-btn="true" size="40" placeholder="Identifiant" width="90%"/>
-                <input type="password" id="pwd" data-clear-btn="true" size="40" placeholder="Mot de passe" width="90%"/>
+                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
+                <input type="tel" id="login" data-clear-btn="true" size="40" placeholder="Identifiant"/>
+                <input type="password" id="pwd" data-clear-btn="true" size="40" placeholder="Mot de passe"/>
                 <div id="loginReturns"></div>
                 <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="login()">Connexion</button>
                 <a href="#subscription" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-user">Nouvelle Inscription</a>
-                <p style="font-size:small;"><a href="#" onClick="forgottenPwd();">Mot de passe oubli&eacute;</a></p>
+                <p style="font-size:small;"><a href="#" id="displayForgot">Mot de passe oubli&eacute;</a></p>
+                <div id="forgotForm" style="display:none;">
+                    <input type="tel" id="forgotTel" data-clear-btn="true" size="40" placeholder="Identifiant"/>
+                    <input type="email" name="forgotMail" size="32" maxlength="60" placeholder="email"/>
+                    <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-mail" onClick="forgottenPwd()">Envoyer</button>
+                </div>
+                <div id="fogotReturns"></div>
             </div>
             </center>
         </div>
@@ -881,14 +908,16 @@
     </div>
     <div data-role="page" data-theme="b" id="subscription" style="background: #000 url(visuels/bg.png) top left repeat-x;">
         <div class="ui-content" role="main">
+            <center>
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
-                <img src="visuels/logo.png" width="60%" style="margin-bottom:-0.6em; max-width:252px"/>
-                <input type="text" id="subName" data-clear-btn="true" size="40" placeholder="Mot de passe" width="90%"/>
-                <input type="tel" id="subTel" data-clear-btn="true" size="40" placeholder="Tel (Sans espace SVP)" width="90%"/>
-                <input type="email" id="subMail" data-clear-btn="true" size="40" placeholder="Identifiant" width="90%"/>
+                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
+                <input type="text" id="subName" data-clear-btn="true" size="40" placeholder="Mot de passe"/>
+                <input type="tel" id="subTel" data-clear-btn="true" size="40" placeholder="Tel (Sans espace SVP)"/>
+                <input type="email" id="subMail" data-clear-btn="true" size="40" placeholder="Identifiant"/>
                 <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="subscribe()">Inscription</button>
                 <div id="data"></div>
             </div>
+            </center>
         </div>
     </div>
 	</body>
