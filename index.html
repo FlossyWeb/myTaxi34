@@ -297,11 +297,19 @@
 				//display = '<p><b>' + data.civil + ' ' + data.nom + ' ' + data.prenom + ' Voici les informations d&rsquo;identification qui vous permettront d&rsquo;acc&egrave;der &agrave; votre compte :<br><span style="color:#09F;">Identifiant = ' + data.tel + '<br>Mot de passe = ' + data.pwd + '</span><br>Vous les recevrez dans quelques instants &agrave; cet email : <span style="color:#09F;">' + data.email + '</span>, merci.<br></b></p>';
 			}
 			else {
-				display = '<p style="color:red;"><b>Vous n&rsquo;avez pas correctement rempli le formulaire d&rsquo;inscription. Nous vous prions de modifier les informations suivantes, si vous d&eacute;sirez  acc&egrave;der &agrave; ce service, d&eacute;sol&eacute;.</b></p>';
+				display = '<p><b>Vous n&rsquo;avez pas correctement rempli le formulaire d&rsquo;inscription. Nous vous prions de modifier les informations suivantes.</b></p><br>';
 				
 				if (data.telexist)
 				{
 					display += '<p style="color:red;"><b>Le num&eacute;ro de t&eacute;l&eacute;phone fourni est d&eacute;j&agrave; associ&eacute; &agrave; un compte.</b></p>';
+				}
+				if (data.telvalid === false)
+				{
+					display += '<p style="color:red;"><b>Le num&eacute;ro de t&eacute;l&eacute;phone fourni n&rsquo;est pas valide: 0000000000 (sans espaces).</b></p>';
+				}
+				if (data.emailvalid === false)
+				{
+					display += '<p style="color:red;"><b>L&rsquo;email fourni n&rsquo;est pas valide.</b></p>';
 				}
 			}
 			$("#data").empty().append(display);
@@ -892,16 +900,16 @@
     </div>
     <div data-role="page" data-theme="b" id="subscription" style="background: #000 url(visuels/bg.png) top left repeat-x;">
         <div class="ui-content" role="main">
-            <center>
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
+            	<center>
                 <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
                 <input type="text" id="subName" data-clear-btn="true" size="40" placeholder="Nom"/>
                 <input type="email" id="subMail" data-clear-btn="true" size="40" placeholder="Email"/>
                 <input type="tel" id="subTel" data-clear-btn="true" size="40" placeholder="Tel (Sans espace SVP)"/>
                 <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="subscribe()">Inscription</button>
+                </center>
                 <div id="data"></div>
             </div>
-            </center>
         </div>
         <div data-role="footer" id="footer_sub" data-position="fixed">
             <center><input type="image" onClick="fbLogin()" src="visuels/FBconnect.png" width="90%"/></center>
