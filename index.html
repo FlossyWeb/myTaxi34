@@ -119,9 +119,9 @@
 			document.addEventListener("backbutton", onBackKeyDown, false);
 			document.addEventListener("menubutton", onMenuKeyDown, false);
 			StatusBar.overlaysWebView(false);
-			if($.localStorage.getItem('registeredUser') == 1)
+			if($.localStorage.getItem('registeredUser') != 1)
 			{
-				$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
+				$.mobile.pageContainer.pagecontainer("change", "#connect", { transition: "slide"} );
 			}
 			setTimeout(function() { 
 				locateMe();
@@ -246,16 +246,24 @@
 					//document.getElementById('data').innerHTML = "Good to see you, fr&egrave;re : " + response.name + "."+response.email + " - "+response.age_range + " - bDay = "+response.birthday + " - "+response.gender + " - "+response.work + " - "+response.website+ " - "+response.link + " - "+response.quotes;
 					$.localStorage.setItem('nom', response.name);
 					$.localStorage.setItem('email', response.email);
-					if($.localStorage.getItem('registeredUser') == 1)
-					{
-						$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
-					}
-					else {
-						//document.getElementById('data').innerHTML = "Good to see you, fr&egrave;re : " + response.name + "."+response.email;
-						$('#subName').val(response.name);
-						$('#subMail').val(response.email);
-						$.mobile.pageContainer.pagecontainer("change", "#subscription", { transition: "slide"} );
-					}
+					$('#subName').val(response.name);
+					$('#subMail').val(response.email);
+					$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/login_fb.php", { email: response.email}, function(data) {
+						$.localStorage.setItem('nom', data.nom);
+						$.localStorage.setItem('email', data.email);
+						$.localStorage.setItem('tel', data.tel);
+						$.localStorage.setItem('registeredUser', 1);
+						if (data.badid)
+						{
+							$.mobile.pageContainer.pagecontainer("change", "#subscription", { transition: "slide"} );
+							//display = '<p style="color:red;"><b>L&rsquo;email fourni est inconnu. Veuillez vous enregistrer SVP</b></p>';
+						}
+						//$("#loginReturns").empty().append(display);
+						if(data.pass)
+						{ // IDENTIFIED SO GETS IN...
+							$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
+						}
+					}, "json");
 				 });
 				//alert('logged in');
 			} else {
@@ -317,6 +325,40 @@
 			$("#subReturns").empty().append(display);
 		}, "json");
 	}
+	function accountMod() {
+		var nom = $('#accName').val();
+		var newtel = $('#accTel').val();
+		var email = $('#accMail').val();
+		var pwd = $('#accPwd').val();
+		$("#accReturns").empty();
+		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/modmy_app.php", { nom: nom, tel: tel, newtel: newtel, email: email, pwd: pwd}, function(data) {
+			$.localStorage.setItem('nom', data.nom);
+			$.localStorage.setItem('email', data.email);
+			$.localStorage.setItem('tel', data.tel);
+			
+			if (data.modmy == 1)
+			{
+				display = '<p style="color:green;"><b>Vous avez bien modifi&eacute; votre compte.</b></p><br>';
+			}
+			else {
+				display = '<p style="color:red;"><b>Vous n&rsquo;avez pas modifi&eacute; votre compte.</b></p><br>';
+				
+				if (data.telvalid === false)
+				{
+					display += '<p style="color:red;"><b>Le num&eacute;ro de t&eacute;l&eacute;phone fourni n&rsquo;est pas valide: 0000000000 (sans espaces).</b></p>';
+				}
+				if (data.emailvalid === false)
+				{
+					display += '<p style="color:red;"><b>L&rsquo;email fourni n&rsquo;est pas valide.</b></p>';
+				}
+				if ((data.telvalid == 1) && (data.emailvalid == 1))
+				{
+					display += '<p style="color:red;"><b>Le t&eacute;l&eacute;phone renseign&eacute; n&rsquo;est associ&eacute; &agrave; aucun compte.</b></p>';
+				}
+			}
+			$("#accReturns").empty().append(display);
+		}, "json");
+	}
 	function forgottenPwd() {
 		var login = $('#forgotTel').val();
 		var mail = $('#forgotMail').val();
@@ -338,7 +380,13 @@
 			$('#forgotForm').slideToggle();
 		});
 	});
-	
+
+	$( '#account' ).live( 'pagecreate',function(event){
+		$('#accName').val(nom);
+		$('#accMail').val(email);
+		$('#accTel').val(tel);
+	});
+
 	$( '#infos' ).live( 'pagecreate',function(event){
 		
 		$("#addressInput").geocomplete({
@@ -724,30 +772,6 @@
     </script>
     </head>
     <body style="margin:0px; padding:0px;">
-    <div data-role="page" data-theme="b" style="background: #000 url(visuels/bg.png) top left repeat-x;" id="connect">
-        <div class="ui-content" role="main">
-            <center>
-            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; margin-top:1em; display:block;">
-                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
-                <input type="tel" id="login" data-clear-btn="true" size="40" placeholder="Identifiant"/>
-                <input type="password" id="pwd" data-clear-btn="true" size="40" placeholder="Mot de passe"/>
-                <div id="loginReturns"></div>
-                <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="login()">Connexion</button>
-                <a href="#subscription" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-user">Nouvelle Inscription</a>
-                <p style="font-size:small;"><a href="#" id="displayForgot">Mot de passe oubli&eacute;</a></p>
-                <div id="forgotForm" style="display:none;">
-                    <input type="tel" id="forgotTel" data-clear-btn="true" size="40" placeholder="Identifiant"/>
-                    <input type="email" name="forgotMail" size="32" maxlength="60" placeholder="email"/>
-                    <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-mail" onClick="forgottenPwd()">Envoyer</button>
-                </div>
-                <div id="fogotReturns"></div>
-            </div>
-            </center>
-        </div>
-        <div data-role="footer" id="footer_con" data-position="fixed">
-            <center><input type="image" onClick="fbLogin()" src="visuels/FBconnect.png" width="90%"/></center>
-        </div>
-    </div>
     <div data-role="page" data-theme="b" style="background: #000 url(visuels/bg.png) top left repeat-x;" id="infos">
         <div data-role="panel" id="homepanel" data-position="left" data-display="reveal">
             <!-- panel content goes here -->
@@ -755,7 +779,7 @@
               <li><a href="#infos" data-rel="close" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
               <li><a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Partager l&rsquo;app</b></a></li>
               <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
-              <!-- <li><a href="#subscription" class="ui-btn ui-btn-icon-left ui-icon-user" onclick="fbLogin()">S&rsquo;Identifier</a></li> -->
+              <li><a href="#account" class="ui-btn ui-btn-icon-left ui-icon-user">Mon compte</a></li>
             </ul>
             <a href="#infos" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Fermer</a>
         </div><!-- /panel -->
@@ -900,6 +924,30 @@
             </div>
         </div>
     </div>
+    <div data-role="page" data-theme="b" style="background: #000 url(visuels/bg.png) top left repeat-x;" id="connect">
+        <div class="ui-content" role="main">
+            <center>
+            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; margin-top:1em; display:block;">
+                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
+                <input type="tel" id="login" data-clear-btn="true" size="40" placeholder="Identifiant"/>
+                <input type="password" id="pwd" data-clear-btn="true" size="40" placeholder="Mot de passe"/>
+                <div id="loginReturns"></div>
+                <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="login()">Connexion</button>
+                <a href="#subscription" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-user">Nouvelle Inscription</a>
+                <p style="font-size:small;"><a href="#" id="displayForgot">Mot de passe oubli&eacute;</a></p>
+                <div id="forgotForm" style="display:none;">
+                    <input type="tel" id="forgotTel" data-clear-btn="true" size="40" placeholder="Identifiant"/>
+                    <input type="email" name="forgotMail" size="32" maxlength="60" placeholder="email"/>
+                    <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-mail" onClick="forgottenPwd()">Envoyer</button>
+                </div>
+                <div id="fogotReturns"></div>
+            </div>
+            </center>
+        </div>
+        <div data-role="footer" id="footer_con" data-position="fixed">
+            <center><input type="image" onClick="fbLogin()" src="visuels/FBconnect.png" width="90%"/></center>
+        </div>
+    </div>
     <div data-role="page" data-theme="b" id="subscription" style="background: #000 url(visuels/bg.png) top left repeat-x;">
         <div class="ui-content" role="main">
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
@@ -912,6 +960,24 @@
                 </center>
                 <div id="data"></div>
                 <div id="subReturns"></div>
+            </div>
+        </div>
+        <div data-role="footer" id="footer_sub" data-position="fixed">
+            <center><input type="image" onClick="fbLogin()" src="visuels/FBconnect.png" width="90%"/></center>
+        </div>
+    </div>
+    <div data-role="page" data-theme="b" id="account" style="background: #000 url(visuels/bg.png) top left repeat-x;">
+        <div class="ui-content" role="main">
+            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
+            	<center>
+                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
+                <input type="tel" id="accTel" data-clear-btn="true" size="40" placeholder="Tel (Sans espace SVP)"/>
+                <input type="text" id="accName" data-clear-btn="true" size="40" placeholder="Nom"/>
+                <input type="email" id="accMail" data-clear-btn="true" size="40" placeholder="Email"/>
+                <input type="password" id="accPwd" data-clear-btn="true" size="40" placeholder="Mot de passe"/>
+                <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-edit" onClick="accountMod()">Modifier</button>
+                </center>
+                <div id="accReturns"></div>
             </div>
         </div>
         <div data-role="footer" id="footer_sub" data-position="fixed">
