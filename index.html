@@ -382,6 +382,9 @@
 	});
 
 	$( '#account' ).live( 'pagecreate',function(event){
+		var nom = $.localStorage.getItem('nom');
+		var tel = $.localStorage.getItem('tel');
+		var email = $.localStorage.getItem('email');
 		$('#accName').val(nom);
 		$('#accMail').val(email);
 		$('#accTel').val(tel);
@@ -967,6 +970,19 @@
         </div>
     </div>
     <div data-role="page" data-theme="b" id="account" style="background: #000 url(visuels/bg.png) top left repeat-x;">
+        <div data-role="panel" id="accpanel" data-position="left" data-display="reveal">
+            <!-- panel content goes here -->
+            <ul data-role="listview" data-inset="true" data-theme="b">
+              <li><a href="#infos" data-rel="close" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
+              <li><a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Partager l&rsquo;app</b></a></li>
+              <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
+              <li><a href="#account" class="ui-btn ui-btn-icon-left ui-icon-user">Mon compte</a></li>
+            </ul>
+            <a href="#account" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Fermer</a>
+        </div><!-- /panel -->
+        <div data-role="header">
+            <a href="#accpanel" id="panel_poper" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-arrow-l"><p style="font-size:16px"><b>Menu</b></p></a>
+        </div>
         <div class="ui-content" role="main">
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
             	<center>
