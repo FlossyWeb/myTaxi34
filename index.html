@@ -247,7 +247,6 @@
 						$.localStorage.setItem('nom', data.nom);
 						$.localStorage.setItem('email', data.email);
 						$.localStorage.setItem('tel', data.tel);
-						$.localStorage.setItem('registeredUser', 1);
 						if (data.badid)
 						{
 							$.mobile.pageContainer.pagecontainer("change", "#subscription", { transition: "slide"} );
@@ -256,6 +255,7 @@
 						//$("#loginReturns").empty().append(display);
 						if(data.pass)
 						{ // IDENTIFIED SO GETS IN...
+							$.localStorage.setItem('registeredUser', 1);
 							$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
 						}
 					}, "json");
@@ -273,7 +273,6 @@
 			$.localStorage.setItem('nom', data.nom);
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('tel', data.tel);
-			$.localStorage.setItem('registeredUser', 1);
 			if (data.badid)
 			{
 				display = '<p style="color:red;"><b>Les identifiant et mot de passe fournis ne sont pas corrects.</b></p>';
@@ -281,6 +280,7 @@
 			$("#loginReturns").empty().append(display);
 			if(data.pass)
 			{ // IDENTIFIED SO GETS IN...
+				$.localStorage.setItem('registeredUser', 1);
 				$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
 			}
 		}, "json");
@@ -294,10 +294,10 @@
 			$.localStorage.setItem('nom', data.nom);
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('tel', data.tel);
-			$.localStorage.setItem('registeredUser', 1);
 			if (data.subscribed === true)
 			{
 				//alert(data.subscribed+' '+data.telexist+' '+data.telvalid+' '+data.emailvalid);
+				$.localStorage.setItem('registeredUser', 1);
 				$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
 				//display = '<p><b>' + data.civil + ' ' + data.nom + ' ' + data.prenom + ' Voici les informations d&rsquo;identification qui vous permettront d&rsquo;acc&egrave;der &agrave; votre compte :<br><span style="color:#09F;">Identifiant = ' + data.tel + '<br>Mot de passe = ' + data.pwd + '</span><br>Vous les recevrez dans quelques instants &agrave; cet email : <span style="color:#09F;">' + data.email + '</span>, merci.<br></b></p>';
 			}
@@ -416,6 +416,7 @@
 		$('#cellular').val(tel);
 		$('.expends').click(function () {
 			$(this).next('div').slideToggle('slow');
+			$.mobile.silentScroll($(this).next('div').offset().top);
 		});
 		
 		$('#regLinks').append('<fieldset data-role="controlgroup"><legend>Derni&egrave;res informations saisies:</legend>');
