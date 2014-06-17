@@ -70,6 +70,15 @@ ul, li {
 ul.popers a {
 	display: inline;
 }
+.expends {
+	display: inline-block;
+	width: 96%;
+	color: #FC0;
+	cursor: pointer;
+}
+#details, #book {
+	display: none;
+}
 .back {
 	position: absolute;
 	top: 0px;
