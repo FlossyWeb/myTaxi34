@@ -459,7 +459,7 @@
 	}
 	function showError(error)
 	{
-		var x=document.getElementById("results");
+		var x=document.getElementById("resultsGeo");
 		switch(error.code) 
 		{
 			case error.PERMISSION_DENIED:
@@ -619,8 +619,9 @@
 		if(cb == 1) {
 			payment = "Oui";
 		}
+		var coms = document.getElementById("coms").value.replace(/'/g, "&rsquo;");
 		//var comments = '<ul>' + hostname + '<li>Nom du client : ' + room + '</li><li>Paiement CB : ' + payment + '</li><li>Nombre de passagers : ' + howMany + '</li><li>Type de vehicule : ' + typecar + '</li></ul>';
-		var comments = '<ul><li>Nom du client : ' + room + '</li><li>Paiement CB : ' + payment + '</li><li>Nombre de passagers : ' + howMany + '</li><li>Type de vehicule : ' + typecar + '</li></ul>';
+		var comments = '<ul><li>Nom du client : ' + room + '</li><li>Paiement CB : ' + payment + '</li><li>Nombre de passagers : ' + howMany + '</li><li>Type de vehicule : ' + typecar + '</li><li>' + coms + '</li></ul>';
 		var dest = document.getElementById("DestAddress").value.replace(/'/g, "&rsquo;");
 		var cell = document.getElementById("cellular").value;
 		var when = document.getElementById("when").value;
@@ -850,14 +851,7 @@
                         <option value="0">Non</option>
                         <option value="1">Oui</option>
                     </select>
-                    <!--
-                    <select id="radiusSelect">
-                        <option value="5" selected>5 Km</option>
-                        <option value="10">10 Km</option>
-                        <option value="25">25 Km</option>
-                        <option value="100">100 Km</option>
-                    </select>
-                    -->
+                    <textarea id="coms" placeholder="Commentaires"></textarea>
                 </div>
                 <p class="expends">Infos Resa<img src="visuels/lineDown.png" width="100%"/></p>
                 <div id="book">
@@ -878,7 +872,6 @@
                 <hr>
                 <a class="portal" style="width:90%;" href="taxipad_portal.php" target="_top">Retour &agrave; l&rsquo;Accueil</a>
                 -->
-                <div id="results"></div>
                 <div data-role="popup" data-theme="a" id="errorPop" data-dismissible="true">
 					<a href="#infos" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Fermer</a>
                     <div data-theme="a" data-role="header">
@@ -887,7 +880,7 @@
                         </h1>
                     </div>
                     <div class="ui-content" role="main">
-                        <div id="results"></div>
+                        <div id="resultsGeo"></div>
                     </div>
                 </div>
                 <div data-role="popup" data-theme="a" id="rememberMe" data-dismissible="true">
