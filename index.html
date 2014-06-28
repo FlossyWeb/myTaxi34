@@ -695,8 +695,15 @@
 			payment = "Oui";
 		}
 		var coms = document.getElementById("coms").value.replace(/'/g, "&rsquo;");
-		//var comments = '<ul>' + hostname + '<li>Nom du client : ' + room + '</li><li>Paiement CB : ' + payment + '</li><li>Nombre de passagers : ' + howMany + '</li><li>Type de vehicule : ' + typecar + '</li></ul>';
 		var comments = '<ul><li>Nom du client : ' + room + '</li><li>Paiement CB : ' + payment + '</li><li>Nombre de passagers : ' + howMany + '</li><li>Type de vehicule : ' + typecar + '</li><li>' + coms + '</li></ul>';
+		var comments1 = '<ul><li>Nom du client : ' + room + '</li><li>Paiement CB : ' + payment + '</li><li>Nombre de passagers : ' + howMany + '</li><li>Type de vehicule : ' + typecar + '</li>';
+		if (coms != '') {
+			var comments2 = '<li>' + coms + '</li></ul>';
+		}
+		else {
+			var comments2 = '</ul>';
+		}
+		var comments = comments1+comments2;
 		var dest = document.getElementById("DestAddress").value.replace(/'/g, "&rsquo;");
 		var cell = document.getElementById("cellular").value;
 		var when = document.getElementById("when").value;
@@ -1078,7 +1085,7 @@
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
             	<center>
                 <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
-                <p><b><br><br>Votre demande a &eacute;t&eacute; prise en compte, votre taxi prendra contact avec vous par t&eacute;l&eacute;phone ou sms.<br><br>Toute l&rsquo;&eacute;quipe myTaxi 34 vous remerci.</b></p>
+                <p><b><br><br>Votre demande a &eacute;t&eacute; prise en compte, votre taxi prendra contact avec vous par t&eacute;l&eacute;phone ou sms.<br><br>Toute l&rsquo;&eacute;quipe myTaxi 34 vous remercie.</b></p>
                 <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-edit" onClick="goback('index.html')">Retour</button>
                 </center>
             </div>
