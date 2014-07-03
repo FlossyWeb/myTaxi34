@@ -21,7 +21,7 @@
             media="(device-width: 320px) and (device-height: 568px)
             and (-webkit-device-pixel-ratio: 2)"
             href="visuels/startup_image_i5.png">
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
     <link type="text/css" rel="stylesheet" href="css/dcvpad.css" />
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -38,7 +38,7 @@
 			$.mobile.loader.prototype.options.html = '<span class="ui-bar ui-overlay-c ui-corner-all"><center><img src="visuels/preload_world.gif"/><br><span style="color:#F00;">Veuillez patienter pendant la recherche de taxis disponibles</span><br>Merci de votre confiance !</center></span>';
         });
     </script>    
-    <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
     <script src="phonegap.js"></script>
     <script src="barcodescanner.js"></script>
     <script src="contactNumberPicker.js"></script>
@@ -254,13 +254,15 @@
 			$.localStorage.setItem('nom', data.nom);
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('tel', data.tel);
-			if (data.badid)
+			if (!data.pass)
 			{
 				display = '<p style="color:red;"><b>Les identifiant et mot de passe fournis ne sont pas corrects.</b></p>';
+				$("#loginReturns").empty().append(display);
 			}
-			$("#loginReturns").empty().append(display);
-			if(data.pass)
+			else
 			{ // IDENTIFIED SO GETS IN...
+				$('#Accurate').val(data.nom);
+				$('#cellular').val(data.tel);
 				$.localStorage.setItem('registeredUser', 1);
 				$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
 			}
@@ -371,10 +373,10 @@
 		idcourse = myDate.getTime();
 		//$('#dblinks').append($('<input id="idcourse" type="hidden" value="' + idcourse + '"/>'));
 		//var radius = document.getElementById('radiusSelect').value;
-		var rdvpoint = document.getElementById("addressInput").value.replace(/'/g, "&rsquo;");
-		var room = document.getElementById("Accurate").value.replace(/'/g, "&rsquo;");
+		var rdvpoint = document.getElementById("addressInput").value;
+		var room = document.getElementById("Accurate").value;
 		var operator = document.getElementById("operator").value;
-		var hostname = document.getElementById("hostname").value.replace(/'/g, "&rsquo;");
+		var hostname = document.getElementById("hostname").value;
 		var howMany = document.getElementById("howMany").value;
 		var typecar = document.getElementById("CarType").value;
 		var cb = document.getElementById("Pay").value;
@@ -430,13 +432,16 @@
 		url = '';
 		num_req = idcourse;
 		url = 'taxi=0000&tel=0000000000&idcourse=' + idcourse + '&num_req=' + num_req + '&rdvpoint=' + rdvpoint + '&lat=' + rdvlat + '&lng=' + rdvlng + '&comments=' + comments + '&cell=' + cell + '&when=' + when + '&date=' + date + '&operator=' + operator + '&howmany=' + howMany + '&dep=34&group=1&ack=0&db=1';
-		url = url.replace(/'/g, "&rsquo;");
+		//url = url.replace(/'/g, "&rsquo;");
+		url = url.replace(/(?:\r\n|\r|\n)/g, '<br/>'); // Replaces line breaks by <br/>
+		//alert(url);
 		$.post("https://ssl14.ovh.net/~taxibleu/server/bookings_app_share.php", url, function(data) {});
 	});
-
+	/*
 	$('#infos').live("swiperight", function() {
 		$("#panel_poper").trigger('click');
 	});
+	*/
 	$( '#infos' ).live( 'pagecreate',function(event){
 		
 		$("#addressInput").geocomplete({
@@ -669,10 +674,10 @@
 		idcourse = myDate.getTime();
 		//$('#dblinks').append($('<input id="idcourse" type="hidden" value="' + idcourse + '"/>'));
 		//var radius = document.getElementById('radiusSelect').value;
-		var rdvpoint = document.getElementById("addressInput").value.replace(/'/g, "&rsquo;");
-		var room = document.getElementById("Accurate").value.replace(/'/g, "&rsquo;");
+		var rdvpoint = document.getElementById("addressInput").value;
+		var room = document.getElementById("Accurate").value;
 		var operator = document.getElementById("operator").value;
-		var hostname = document.getElementById("hostname").value.replace(/'/g, "&rsquo;");
+		var hostname = document.getElementById("hostname").value;
 		var howMany = document.getElementById("howMany").value;
 		var typecar = document.getElementById("CarType").value;
 		var cb = document.getElementById("Pay").value;
@@ -690,7 +695,7 @@
 			var comments2 = '</ul>';
 		}
 		var comments = comments1+comments2;
-		var dest = document.getElementById("DestAddress").value.replace(/'/g, "&rsquo;");
+		var dest = document.getElementById("DestAddress").value;
 		var cell = document.getElementById("cellular").value;
 		var when = document.getElementById("when").value;
 		var date = document.getElementById("date").value;
@@ -744,19 +749,21 @@
 				var display_name = 'Taxi ' + name;
 				var cabIcon = 'visuels/cab_marker.png';
 				mapEvent.addMarker({ id: i ,'position': latlng, 'bounds': true, 'title': display_name, 'icon': cabIcon }).click(function() {
-					infoCont = "<b>Le taxi n&deg; " + name + " est &agrave; " + parseFloat(distance).toFixed(1) + " Km de vous</b><br>" + address;
+					infoCont = '<p style="color:#333;"><b>taxi n&deg; ' + name + ' est &agrave; ' + parseFloat(distance).toFixed(1) + ' Km de vous' + address+ '</b></p>';
 					mapEvent.openInfoWindow({ 'content':  infoCont}, this);
 				});
 				//mapEvent.addBounds(latlng);
 				url = 'taxi=' + name + '&tel=' + address + '&idcourse=' + idcourse + '&num_req=' + num_req + '&rdvpoint=' + rdvpoint + '&lat=' + rdvlat + '&lng=' + rdvlng + '&comments=' + comments + '&cell=' + cell + '&when=' + when + '&date=' + date + '&operator=' + operator + '&dep=34&group=1&ack=0&db=1';
-				url = url.replace(/'/g, "&rsquo;");
+				//url = url.replace(/'/g, "&rsquo;");
+				url = url.replace(/(?:\r\n|\r|\n)/g, '<br/>'); // Replaces line breaks by <br/>
 				//$.post("https://ssl14.ovh.net/~taxibleu/server/diary_app_share.php", url, function(data) {});
 				$('#dblinks').append($('<input class="cabs" id="' + i + '" type="hidden" onclick="sendJob(\''+ url +'\')" />'));
 			});
 			num_req = num_req+1;
 			i = parseInt(i,10)+1;
 			url = 'taxi=0000&tel=0000000000&idcourse=' + idcourse + '&num_req=' + num_req + '&rdvpoint=' + rdvpoint + '&lat=' + rdvlat + '&lng=' + rdvlng + '&comments=' + comments + '&cell=' + cell + '&when=' + when + '&date=' + date + '&operator=' + operator + '&dep=34&group=1&ack=0&db=1';
-			url = url.replace(/'/g, "&rsquo;");
+			//url = url.replace(/'/g, "&rsquo;");
+			url = url.replace(/(?:\r\n|\r|\n)/g, '<br/>'); // Replaces line breaks by <br/>
 			// Sends Auction Request to TaxiMedia Server
 			$('#dblinks').append($('<input class="cabs" id="' + i + '" type="hidden" onclick="sendJob(\''+ url +'\')" />'));
 			//$.post("https://ssl14.ovh.net/~taxibleu/server/diary_app_share.php", url, function(data) {});
@@ -782,35 +789,32 @@
 	
     function check_answer()
     {
-        sec = setInterval( function () {
-            $.post("https://ssl14.ovh.net/~taxibleu/server34/status.php?idcourse=" + idcourse + "&check=1" , {}, function(data){ 
-                if (data != 0)
-                {
-                    clearInterval(sec);
-					clearInterval(time);
-					clearTimeout(endcourse);
-                    cancel(idcourse);
-					document.getElementById('stop').value = 1;
-                    //var box = alert(data);
-					//stopCall();
-					//var box = alert(data);
-					//$('#thanksResults').empty().append(data);
-                    $('#answer').empty().append(data);
-                    $( "#answerBox" ).popup( "open", { positionTo: "window" } );
-                    /*
-                    var box = confirm(data);
-                    if (box == true) {
-                        parent.location.href='taxipad_portal.php';
-                    }
-                    else {
-                        parent.location.href='taxipad_portal.php';
-                    }
-                    */
-                    //return false;
-                }
-            }); 
-        }, 1000);
-        return false;
+		$.post("https://ssl14.ovh.net/~taxibleu/server34/status.php?idcourse=" + idcourse + "&check=1" , {}, function(data){ 
+			if (data != 0)
+			{
+				clearInterval(time);
+				clearTimeout(endcourse);
+				cancel(idcourse);
+				document.getElementById('stop').value = 1;
+				//var box = alert(data);
+				//stopCall();
+				//var box = alert(data);
+				//$('#thanksResults').empty().append(data);
+				$('#answer').empty().append(data);
+				$( "#answerBox" ).popup( "open", { positionTo: "window" } );
+				/*
+				var box = confirm(data);
+				if (box == true) {
+					parent.location.href='taxipad_portal.php';
+				}
+				else {
+					parent.location.href='taxipad_portal.php';
+				}
+				*/
+				//return false;
+			}
+		});
+		setTimeout('check_answer()', 1000);
     }
     function cancel(idcourse)
     {
@@ -839,11 +843,6 @@
     {
         $.mobile.pageContainer.pagecontainer("change", "#map_page", { transition: "slide"} );
     }
-	/*
-	$('#infos').live("swiperight", function() {
-		$("#panel_poper").trigger('click');
-	});
-	*/
     </script>
     </head>
     <body style="margin:0px; padding:0px;">
@@ -881,13 +880,13 @@
                 	<tr><td>
                         <input type="text" id="addressInput" data-clear-btn="true" size="40" placeholder="Adresse RDV" width="90%"/>
                     </td><td>
-                        <input type="button" data-icon="location" data-iconpos="notext" value="Geoloc" onClick="locateMe()"/>
+                        <button onClick="locateMe()" class="ui-btn ui-btn-b ui-icon-location ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
                     </td></tr>
                 <input type="hidden" id="DestAddress" size="10" value="DESTINATION"/>
                 	<tr><td>
                         <input type="text" id="Accurate" data-clear-btn="true" class="mustHave" size="32" placeholder="Nom *"/>
                     </td><td>
-                        <input type="button" data-icon="edit" data-iconpos="notext" value="Contact" onClick="getContact()"/>
+                        <button onClick="getContact()" class="ui-btn ui-btn-b ui-icon-edit ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
                     </td></tr>
                 	<tr><td>
                         <input type="tel" id="cellular" data-clear-btn="true" class="mustHave" size="20" placeholder="Tel *"/>
@@ -1006,7 +1005,7 @@
                 <p style="font-size:small;"><a href="#" id="displayForgot">Mot de passe oubli&eacute;</a></p>
                 <div id="forgotForm" style="display:none;">
                     <input type="tel" id="forgotTel" data-clear-btn="true" size="40" placeholder="Identifiant"/>
-                    <input type="email" name="forgotMail" size="32" maxlength="60" placeholder="email"/>
+                    <input type="email" id="forgotMail" size="32" maxlength="60" placeholder="email"/>
                     <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-mail" onClick="forgottenPwd()">Envoyer</button>
                 </div>
                 <div id="fogotReturns"></div>
