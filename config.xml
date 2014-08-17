@@ -14,7 +14,7 @@
 	   Réservez votre taxi simplement via votre mobile avec l'application My Taxi 34.
 	</description>
 
-    <preference name="phonegap-version" value="3.5.0" />
+    <preference name="phonegap-version" value="3.3.0" />
     <preference name="orientation"      value="default" />
     <preference name="target-device"    value="universal" />
     <preference name="fullscreen"       value="false" />
@@ -56,11 +56,11 @@
 	<gap:plugin name="com.phonegap.plugins.barcodescanner" />
 	<gap:plugin name="com.adobe.plugins.gaplugin" />
 	<gap:plugin name="com.phonegap.plugins.pushplugin" />
+	-->
 	<gap:plugin name="com.phonegap.plugins.facebookconnect" version="0.4.0">
 		<param name="APP_ID" value="1488204401415966" />
 		<param name="APP_NAME" value="myTaxi" />
 	</gap:plugin>
-	-->
 	<gap:plugin name="com.phonegap.plugins.barcodescanner" />
 	<gap:plugin name="hu.dpal.phonegap.plugins.contactnumberpicker" version="0.1.1" />
 	<gap:plugin name="tr.bel.mamak.sms_plagin" version="0.1.0" />
