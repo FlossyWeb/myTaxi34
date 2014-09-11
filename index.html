@@ -46,6 +46,7 @@
     <script src="cdv-plugin-fb-connect.js"></script>
     <script src="facebook-js-sdk.js"></script>
     <script type="text/javascript" src="js/jquery.html5storage.min.js"></script>
+    <script type="text/javascript" src="js/jsimple-star-rating.min.js"></script>
     <script src="https://maps.google.com/maps/api/js?key=AIzaSyCvL4a4-LKLUXJrTwpJ4_UnkmtZSGgrVWg&sensor=false&libraries=places" type="text/javascript"></script>
 	<script type="text/javascript" src="js/jquery.geocomplete.min.js"></script>
 	<script type="text/javascript" src="ui/min/jquery.ui.map.full.min.js"></script>
@@ -58,7 +59,6 @@
 	var idcourse;
 	var time;
 	var endcourse; // Clears the timeout
-	var sec;
 	var regName1 = $.localStorage.getItem('regName1');
 	var regCell1 = $.localStorage.getItem('regCell1');
 	var regName2 = $.localStorage.getItem('regName2');
@@ -69,6 +69,7 @@
 	var nom = $.localStorage.getItem('nom');
 	var tel = $.localStorage.getItem('tel');
 	var email = $.localStorage.getItem('email');
+	var operator = $.localStorage.getItem('operator');
 	var dontReg = false;
 	var mobileMap = { 'center': '43.609, 3.88', 'zoom': 12 };
 
@@ -163,7 +164,6 @@
 			}
 		);
 	}
-
 	function Share()
 	{
 		var successCallbackPick = function(result){
@@ -192,7 +192,6 @@
 		}
 		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 	}
-	
 	function getContact()
 	{
 		var successCallbackPick = function(result){
@@ -214,7 +213,6 @@
 		}
 		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 	}
-	
 	function fbLogin() {
 		FB.login(function(response) {
 			if (response.status === 'connected') {
@@ -228,6 +226,7 @@
 						$.localStorage.setItem('nom', data.nom);
 						$.localStorage.setItem('email', data.email);
 						$.localStorage.setItem('tel', data.tel);
+						$.localStorage.setItem('operator', data.operator);
 						if (data.badid)
 						{
 							$.mobile.pageContainer.pagecontainer("change", "#subscription", { transition: "slide"} );
@@ -249,6 +248,10 @@
 			}
 		},{ scope: "email" });
 	}
+	function dc() {
+		$.localStorage.setItem('registeredUser', 0);
+		$.mobile.pageContainer.pagecontainer("change", "#connect", { transition: "slide"} );
+	}
 	function login() {
 		var id = $('#login').val();
 		var pwd = $('#pwd').val();
@@ -256,6 +259,7 @@
 			$.localStorage.setItem('nom', data.nom);
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('tel', data.tel);
+			$.localStorage.setItem('operator', data.operator);
 			if (!data.pass)
 			{
 				display = '<p style="color:red;"><b>Les identifiant et mot de passe fournis ne sont pas corrects.</b></p>';
@@ -279,6 +283,7 @@
 			$.localStorage.setItem('nom', data.nom);
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('tel', data.tel);
+			$.localStorage.setItem('operator', data.operator);
 			if (data.subscribed === true)
 			{
 				//alert(data.subscribed+' '+data.telexist+' '+data.telvalid+' '+data.emailvalid);
@@ -354,13 +359,14 @@
 			$("#fogotReturns").empty().append(display);
 		}, "json");
 	}
-
+	$(document).bind( 'pagecreate', function() {
+		$( "body>[data-role='panel']" ).panel().enhanceWithin();
+	});
 	$( '#connect' ).live( 'pagecreate',function(event){
 		$('#displayForgot').click(function (){
 			$('#forgotForm').slideToggle();
 		});
 	});
-
 	$( '#account' ).live( 'pagecreate',function(event){
 		var nom = $.localStorage.getItem('nom');
 		var tel = $.localStorage.getItem('tel');
@@ -369,7 +375,69 @@
 		$('#accMail').val(email);
 		$('#accTel').val(tel);
 	});
-	
+	function more(n) {
+		$('#histBlock'+n).slideToggle('slow');
+	}
+	function moreb(n) {
+		$('#bookBlock'+n).slideToggle('slow');
+	}
+	function refreshHist() {
+		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/history.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 1}, function(data){
+			$.mobile.loading( "show" );
+			$("#hist_cont").empty().append(data);
+		}).done(function() { $.mobile.loading( "hide" ); });
+		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/history.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 0}, function(data){
+			$.mobile.loading( "show" );
+			$("#book_cont").empty().append(data);
+		}).done(function() { $.mobile.loading( "hide" ); });
+	}
+	$( '#history' ).live( 'pagecreate',function(event){
+		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/history.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 1}, function(data){
+			$.mobile.loading( "show" );
+			$("#hist_cont").empty().append(data);
+		}).done(function() { $.mobile.loading( "hide" ); });
+		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/history.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 0}, function(data){
+			$.mobile.loading( "show" );
+			$("#book_cont").empty().append(data);
+		}).done(function() { $.mobile.loading( "hide" ); });
+	});
+	function rateCab(rtaxi, ridcourse, rdep, rtel)
+	{
+		$.sessionStorage.setItem('rtaxi', rtaxi);
+		$.sessionStorage.setItem('ridcourse', ridcourse);
+		$.sessionStorage.setItem('rdep', rdep);
+		$.sessionStorage.setItem('rtel', rtel);
+		$.mobile.pageContainer.pagecontainer("change", "#rate_page", { transition: "slide"} );
+	}
+	$( '#rate_page' ).live( 'pagecreate',function(event){
+		var noted = $.sessionStorage.getItem('rtaxi');
+		$('#urate').empty().append('Vous notez le taxi '+noted);
+		$(".rating").starRating({
+			minus: false // step minus button
+		});
+		$(".rating2").starRating({
+			minus: false // step minus button
+		});
+		$(".rating3").starRating({
+			minus: false // step minus button
+		});
+		$(".rating4").starRating({
+			minus: false // step minus button
+		});
+	});
+	function rating()
+	{
+		var rtaxi = $.sessionStorage.getItem('rtaxi');
+		var ridcourse = $.sessionStorage.getItem('ridcourse');
+		var rdep = $.sessionStorage.getItem('rdep');
+		var rtel = $.sessionStorage.getItem('rtel');
+		var accueil = $(".rating").data("val");
+		var tarif = $(".rating2").data("val");
+		var vehicule = $(".rating3").data("val");
+		var conduite = $(".rating4").data("val");
+		//alert(rtaxi+' - '+ridcourse+' - '+rdep+' - '+rtel+' - '+accueil+' - '+tarif+' - '+vehicule+' - '+conduite);
+		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/rate.php", { taxi: rtaxi, idcourse: ridcourse, dep: rdep, tel: rtel, accueil: accueil, tarif: tarif, vehicule: vehicule, conduite: conduite, judge: 1}, function(data){ $('#rateBack').empty().append('Vos notes ont &eacute;t&eacute; prise en compte, Merci.');});
+	}
 	$( '#book_page' ).live( 'pagecreate',function(event){
 		var myDate = new Date();
 		idcourse = myDate.getTime();
@@ -377,7 +445,7 @@
 		//var radius = document.getElementById('radiusSelect').value;
 		var rdvpoint = document.getElementById("addressInput").value;
 		var room = document.getElementById("Accurate").value;
-		var operator = document.getElementById("operator").value;
+		var operator = $.localStorage.getItem('operator');
 		var hostname = document.getElementById("hostname").value;
 		var howMany = document.getElementById("howMany").value;
 		var typecar = document.getElementById("CarType").value;
@@ -567,10 +635,11 @@
 	});
 	
 	$('#map_page').live('pagecreate', function() {
+		/*
         var getback = setTimeout( function () {
             $("#cancel").trigger('click');
         }, 180000);
-		//demo.add('basic_map', function() {
+		*/
 		//$('#dblinks').empty();
 		$('#map').gmap({'center': mobileMap.center, 'zoom': mobileMap.zoom, 'disableDefaultUI':false, 'mapTypeId': google.maps.MapTypeId.ROADMAP, 'callback': function() {
 		//$('#map').gmap({'callback': function() {
@@ -630,7 +699,6 @@
 					// THIS ONE IS THE 0000 CAB AND LAST ONE SO...
 					clearInterval(time);
                     clearTimeout(endcourse); // Clears the current timeout
-                    clearInterval(sec);
 					//alert('Aucun taxi ne prend la course !!');
 					//return false;
 				}
@@ -645,7 +713,6 @@
                     cancel(idcourse);// Cancels every non-acked request after 3 minutes !!
 					clearInterval(time);
                     clearTimeout(endcourse); // Clears the current timeout
-                    clearInterval(sec);
                     //$.fancybox.close();
                     var endbox = confirm('Vous devez soit relancer votre course (OK) soit rechercher de nouveau taxis !! (Annuler)');
                     if (endbox == true) {
@@ -678,7 +745,7 @@
 		//var radius = document.getElementById('radiusSelect').value;
 		var rdvpoint = document.getElementById("addressInput").value;
 		var room = document.getElementById("Accurate").value;
-		var operator = document.getElementById("operator").value;
+		var operator = $.localStorage.getItem('operator');
 		var hostname = document.getElementById("hostname").value;
 		var howMany = document.getElementById("howMany").value;
 		var typecar = document.getElementById("CarType").value;
@@ -827,7 +894,6 @@
 	{
 		$.mobile.loading( "show" );
 		$('#dblinks').empty();	 
-		clearInterval(sec);
 		clearInterval(time);
 		clearTimeout(endcourse);
 		cancel(idcourse);
@@ -848,17 +914,18 @@
     </script>
     </head>
     <body style="margin:0px; padding:0px;">
+    <div data-role="panel" id="homepanel" data-position="left" data-display="reveal">
+        <!-- panel content goes here -->
+        <ul data-role="listview" data-inset="true" data-theme="b">
+          <li><a href="#infos" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
+          <li><a href="#history" class="ui-btn ui-btn-icon-left ui-icon-bars">Historique</a></li>
+          <li><a href="#account" class="ui-btn ui-btn-icon-left ui-icon-user">Mon compte</a></li>
+          <li><a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Partager l&rsquo;app</b></a></li>
+          <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
+        </ul>
+        <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-power" onClick="dc()">D&eacute;connexion</button>
+    </div><!-- /panel -->
     <div data-role="page" data-theme="b" style="background: #000 url(visuels/bg.png) top left repeat-x;" id="infos">
-        <div data-role="panel" id="homepanel" data-position="left" data-display="reveal">
-            <!-- panel content goes here -->
-            <ul data-role="listview" data-inset="true" data-theme="b">
-              <li><a href="#infos" data-rel="close" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
-              <li><a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Partager l&rsquo;app</b></a></li>
-              <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
-              <li><a href="#account" class="ui-btn ui-btn-icon-left ui-icon-user">Mon compte</a></li>
-            </ul>
-            <a href="#infos" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Fermer</a>
-        </div><!-- /panel -->
         <div data-role="header">
             <a href="#homepanel" id="panel_poper" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-arrow-l"><p style="font-size:16px"><b>Menu</b></p></a>
         </div>
@@ -1037,18 +1104,8 @@
         </div>
     </div>
     <div data-role="page" data-theme="b" id="account" style="background: #000 url(visuels/bg.png) top left repeat-x;">
-        <div data-role="panel" id="accpanel" data-position="left" data-display="reveal">
-            <!-- panel content goes here -->
-            <ul data-role="listview" data-inset="true" data-theme="b">
-              <li><a href="#infos" data-rel="close" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
-              <li><a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail"><b>Partager l&rsquo;app</b></a></li>
-              <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera"><b>Scanner un code</b></a></li>
-              <li><a href="#account" class="ui-btn ui-btn-icon-left ui-icon-user">Mon compte</a></li>
-            </ul>
-            <a href="#account" data-rel="close" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Fermer</a>
-        </div><!-- /panel -->
         <div data-role="header">
-            <a href="#accpanel" id="panel_poper" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-arrow-l"><p style="font-size:16px"><b>Menu</b></p></a>
+            <a href="#homepanel" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-arrow-l"><p style="font-size:16px"><b>Menu</b></p></a>
         </div>
         <div class="ui-content" role="main">
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
@@ -1067,6 +1124,24 @@
             <center><input type="image" onClick="fbLogin()" src="visuels/FBconnect.png" width="90%"/></center>
         </div>
     </div>
+    <div data-role="page" data-theme="b" id="history" style="background: #000 url(visuels/bg.png) top left repeat-x;">
+        <div data-role="header">
+            <a href="#homepanel" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-arrow-l"><p style="font-size:16px"><b>Menu</b></p></a>
+            <button onClick="refreshHist()" class="ui-btn ui-btn-b ui-icon-refresh ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
+        </div>
+        <div class="ui-content" role="main">
+            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
+            	<center>
+                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
+                <p style="font-size:16px"><b>Historique des courses</b></p>
+                </center>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a"><div class="ui-bar ui-bar-a"><p>Courses prises</p><div id="hist_cont"></div></div></div>
+                    <div class="ui-block-b"><div class="ui-bar ui-bar-b"><p>R&eacute;servations</p><div id="book_cont"></div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div data-role="page" data-theme="b" id="book_page" style="background: #000 url(visuels/bg.png) top left repeat-x;">
         <div class="ui-content" role="main">
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
@@ -1075,6 +1150,31 @@
                 <p><b><br><br>Votre demande a &eacute;t&eacute; prise en compte, votre taxi prendra contact avec vous par t&eacute;l&eacute;phone ou sms.<br><br>Toute l&rsquo;&eacute;quipe myTaxi 34 vous remercie.</b></p>
                 <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-back" onClick="goback('index.html')">Retour</button>
                 </center>
+            </div>
+        </div>
+    </div>
+    <div data-role="page" data-theme="b" id="rate_page" style="background: #000 url(visuels/bg.png) top left repeat-x;">
+        <div data-role="header">
+            <a href="#homepanel" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-arrow-l"><p style="font-size:16px"><b>Menu</b></p></a>
+        </div>
+        <div class="ui-content" role="main">
+            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
+            	<center>
+                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
+                <div id="urate"></div>
+                </center>
+                <div class="ui-bar-a ui-corner-all ui-shadow" style="padding:1em; display:block;">
+                    Accueil :
+                    <div class="rating" data-rating-max="5"></div><div class="cleaner"></div>
+                    Tarif : 
+                    <div class="rating2" data-rating-max="5"></div><div class="cleaner"></div>
+                    Propret&eacute; / Vehicule : 
+                    <div class="rating3" data-rating-max="5"></div><div class="cleaner"></div>
+                    Conduite / itin&eacute;raire : 
+                    <div class="rating4" data-rating-max="5"></div><div class="spacer"></div>
+                </div>
+                <center><div id="rateBack"></div></center>
+                <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="rating()">Envoyer</button>
             </div>
         </div>
     </div>
