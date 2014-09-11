@@ -441,7 +441,6 @@
 	$( '#book_page' ).live( 'pagecreate',function(event){
 		var myDate = new Date();
 		idcourse = myDate.getTime();
-		//$('#dblinks').append($('<input id="idcourse" type="hidden" value="' + idcourse + '"/>'));
 		//var radius = document.getElementById('radiusSelect').value;
 		var rdvpoint = document.getElementById("addressInput").value;
 		var room = document.getElementById("Accurate").value;
@@ -629,18 +628,13 @@
 		dontReg = true;
 	}
 		
-	$( '#map_page' ).live( 'pagebeforeshow',function(event){
-		//$('#map').gmap('clear', 'markers');
-		//$('#dblinks').empty();	 
-	});
-	
 	$('#map_page').live('pagecreate', function() {
 		/*
         var getback = setTimeout( function () {
             $("#cancel").trigger('click');
         }, 180000);
 		*/
-		//$('#dblinks').empty();
+		$('#dblinks').empty();
 		$('#map').gmap({'center': mobileMap.center, 'zoom': mobileMap.zoom, 'disableDefaultUI':false, 'mapTypeId': google.maps.MapTypeId.ROADMAP, 'callback': function() {
 		//$('#map').gmap({'callback': function() {
 			var self = this;
@@ -649,7 +643,6 @@
 			//var address = document.getElementById("addressInput").value;
 			geocoder.geocode({address: address}, function(results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
-					//$('#dblinks').append($('<p>' + results[0].geometry.location + '__RDV</p>'));
 					var myPlace = results[0].geometry.location;
 					$.mobile.loading( "show" );
 					//self.refresh();
@@ -713,7 +706,6 @@
                     cancel(idcourse);// Cancels every non-acked request after 3 minutes !!
 					clearInterval(time);
                     clearTimeout(endcourse); // Clears the current timeout
-                    //$.fancybox.close();
                     var endbox = confirm('Vous devez soit relancer votre course (OK) soit rechercher de nouveau taxis !! (Annuler)');
                     if (endbox == true) {
 						$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide", reverse: true} );
