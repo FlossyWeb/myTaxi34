@@ -629,12 +629,10 @@
 	}
 		
 	$('#map_page').live('pagecreate', function() {
-		/*
         var getback = setTimeout( function () {
             $("#cancel").trigger('click');
         }, 180000);
-		*/
-		$('#dblinks').empty();
+		//$('#dblinks').empty();
 		$('#map').gmap({'center': mobileMap.center, 'zoom': mobileMap.zoom, 'disableDefaultUI':false, 'mapTypeId': google.maps.MapTypeId.ROADMAP, 'callback': function() {
 		//$('#map').gmap({'callback': function() {
 			var self = this;
@@ -696,36 +694,60 @@
 					//return false;
 				}
 				index++;
-			}, 10000);
-    
-    
-            //clearTimeout(endcourse); // Clears the possible previous timeouts
-            endcourse = setTimeout( function () {
-                //if (stoper != 1) {
-                    //$('#cancel').trigger('click');// Cancels every non-acked request after 3 minutes !!
-                    cancel(idcourse);// Cancels every non-acked request after 3 minutes !!
-					clearInterval(time);
-                    clearTimeout(endcourse); // Clears the current timeout
-                    var endbox = confirm('Vous devez soit relancer votre course (OK) soit rechercher de nouveau taxis !! (Annuler)');
-                    if (endbox == true) {
-						$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide", reverse: true} );
-                    }
-                    else {
-                        document.location.href='index.html';
-                    }
-                //}
-            }, 180000);
-            
+			}, 10000);            
         });
 	});
 	
-	$('#map_page').live('pagecontainershow', function() {
+	$('#map_page').live('pageshow', function() {
 		//demo.add('basic_map', function() { $('#map').gmap('refresh'); }).load('basic_map');
 		//$('#map').gmap("option", "center", mobileMap.center);
 		$('#map').gmap('refresh');
 	});
 	////////////////////////////////////////////////////////////
 	
+	function followCab(ftaxi, fidcourse, fdep, ftel)
+	{
+		$.sessionStorage.setItem('ftaxi', ftaxi);
+		$.sessionStorage.setItem('fidcourse', fidcourse);
+		$.sessionStorage.setItem('fdep', fdep);
+		$.sessionStorage.setItem('ftel', ftel);
+		$.mobile.pageContainer.pagecontainer("change", "#follow", { transition: "slide"} );
+	}
+	$('#follow').live('pagecreate', function() {
+		var ftaxi = $.sessionStorage.getItem('ftaxi');
+		var fidcourse = $.sessionStorage.getItem('fidcourse');
+		var fdep = $.sessionStorage.getItem('fdep');
+		var ftel = $.sessionStorage.getItem('ftel');
+		//alert(ftaxi+' - '+ftel);
+		$('#follow_map').gmap({'center': mobileMap.center, 'zoom': mobileMap.zoom, 'disableDefaultUI':false, 'mapTypeId': google.maps.MapTypeId.ROADMAP, 'callback': function() {
+			var self = this;
+			$.post('https://ssl14.ovh.net/~taxibleu/appserver/follow.php', { taxi: ftaxi, idcourse: fidcourse, dep: fdep, tel: ftel }, function(data){
+				var latlng = new google.maps.LatLng(data.lat, data.lng);
+				var display_name = 'Taxi ' + data.name;
+				var cabIcon = 'visuels/cab_marker.png';
+				self.addMarker({ id: '1' ,'position': latlng, 'bounds': true, 'title': display_name, 'icon': cabIcon }).click(function() {
+					infoCont = '<p style="color:#333;"><b>taxi n&deg; ' + data.name + ' - ' + data.address+ ' &agrave; ' + data.timestamp+ '</b></p>';
+					self.openInfoWindow({ 'content':  infoCont}, this);
+				});
+			}, "json");
+			var track = setInterval( function () {
+				$.post('https://ssl14.ovh.net/~taxibleu/appserver/follow.php', { taxi: ftaxi, idcourse: fidcourse, dep: fdep, tel: ftel }, function(data){
+					var latlng = new google.maps.LatLng(data.lat, data.lng);
+					var display_name = 'Taxi ' + data.name;
+					var cabIcon = 'visuels/cab_marker.png';
+					self.addMarker({ id: '1' ,'position': latlng, 'bounds': true, 'title': display_name, 'icon': cabIcon }).click(function() {
+						infoCont = '<p style="color:#333;"><b>taxi n&deg; ' + data.name + ' - ' + data.address+ ' &agrave; ' + data.timestamp+ '</b></p>';
+						self.openInfoWindow({ 'content':  infoCont}, this);
+					});
+				}, "json");
+			}, 30000); 
+		}});
+	});
+	
+	$('#follow').live('pageshow', function() {
+		$('#follow_map').gmap('refresh');
+	});
+	////////////////////////////////////////////////////////////	
 	
 	function searchLocationsNear(center, mapEvent) {
 		//clearLocations();
@@ -810,7 +832,7 @@
 				var display_name = 'Taxi ' + name;
 				var cabIcon = 'visuels/cab_marker.png';
 				mapEvent.addMarker({ id: i ,'position': latlng, 'bounds': true, 'title': display_name, 'icon': cabIcon }).click(function() {
-					infoCont = '<p style="color:#333;"><b>taxi n&deg; ' + name + ' est &agrave; ' + parseFloat(distance).toFixed(1) + ' Km de vous' + address+ '</b></p>';
+					infoCont = '<p style="color:#333;"><b>Taxi n&deg; ' + name + ' est &agrave; ' + parseFloat(distance).toFixed(1) + ' Km de vous<br>tel: ' + address+ '</b></p>';
 					mapEvent.openInfoWindow({ 'content':  infoCont}, this);
 				});
 				//mapEvent.addBounds(latlng);
@@ -840,7 +862,7 @@
         //$("a.load").trigger('click');
         var GoOn = setTimeout( function () {
             $("#deliver").trigger('click');
-        }, 6000);
+        }, 2000);
     }
 	
     function sendJob(url)
@@ -884,13 +906,14 @@
     }        
 	function stopCall()
 	{
-		$.mobile.loading( "show" );
+		//$.mobile.loading( "show" );
 		$('#dblinks').empty();	 
 		clearInterval(time);
 		clearTimeout(endcourse);
 		cancel(idcourse);
 		//$('#map').gmap('destroy');
 		//$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide", reverse: true} );
+		$( "#backPop" ).popup( "open", { positionTo: "window" } );
 		var wait2getBack = setTimeout( function () {
 			document.location.href='index.html';
 		}, 2000);
@@ -923,10 +946,6 @@
         </div>
         <div class="ui-content" role="main">
             <center>
-            <!-- 
-            <a href="taxipad_portal.php" class="back"><img src="picts/Back_blue.png" /></a>
-            <a href="taxipad_portal.php" class="back"><img src="picts/back_button.png" /></a>
-            -->
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; margin-top:1em; display:block;">
                 <!-- <h1 class="hostname">Commander un taxi</h1> -->
                 <img src="visuels/logo.png" width="60%" style="margin-bottom:-0.6em; max-width:252px"/>
@@ -1050,6 +1069,16 @@
                         <input type="button" value="OK" onClick="goback('index.html')"/>
                     </div>
                 </div>
+                <div data-role="popup" data-theme="a" id="backPop" data-dismissible="false">
+                    <div data-theme="a" data-role="header">
+                        <h1>
+                            Hors d&eacute;lai
+                        </h1>
+                    </div>
+                    <div class="ui-content" role="main">
+                        <p><strong>Aucun taxis ne r&eacute;pond, vous devriez rechercher de nouveau.</strong></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1142,6 +1171,18 @@
                 <p><b><br><br>Votre demande a &eacute;t&eacute; prise en compte, votre taxi prendra contact avec vous par t&eacute;l&eacute;phone ou sms.<br><br>Toute l&rsquo;&eacute;quipe myTaxi 34 vous remercie.</b></p>
                 <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-back" onClick="goback('index.html')">Retour</button>
                 </center>
+            </div>
+        </div>
+    </div>
+    <div data-role="page" data-theme="b" id="follow" style="background: #000 url(visuels/bg.png) top left repeat-x;">
+        <div data-role="header">
+            <button onClick="goback('index.html')" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-power"><p style="font-size:16px"><b>Arr&ecirc;ter</b></p></button>
+        </div>
+        <div class="ui-content" role="main">
+            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
+            	<div class="spacer"></div>
+                <div id="follow_map" style="height:460px;"></div>
+            	<div class="spacer"></div>
             </div>
         </div>
     </div>
