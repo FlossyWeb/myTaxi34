@@ -280,9 +280,9 @@
 		}, "json");
 	}
 	function subscribe() {
-		var nom = $('#subName').val();
-		var tel = $('#subTel').val();
-		var email = $('#subMail').val();
+		nom = $('#subName').val();
+		tel = $('#subTel').val();
+		email = $('#subMail').val();
 		$("#subReturns").empty();
 		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/register_app.php", { nom: nom, tel: tel, email: email}, function(data) {
 			$.localStorage.setItem('nom', data.nom);
@@ -293,6 +293,8 @@
 			{
 				//alert(data.subscribed+' '+data.telexist+' '+data.telvalid+' '+data.emailvalid);
 				$.localStorage.setItem('registeredUser', 1);
+				$('#Accurate').val(data.nom);
+				$('#cellular').val(data.tel);
 				$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
 				//display = '<p><b>' + data.civil + ' ' + data.nom + ' ' + data.prenom + ' Voici les informations d&rsquo;identification qui vous permettront d&rsquo;acc&egrave;der &agrave; votre compte :<br><span style="color:#09F;">Identifiant = ' + data.tel + '<br>Mot de passe = ' + data.pwd + '</span><br>Vous les recevrez dans quelques instants &agrave; cet email : <span style="color:#09F;">' + data.email + '</span>, merci.<br></b></p>';
 			}
@@ -316,10 +318,10 @@
 		}, "json");
 	}
 	function accountMod() {
-		var nom = $('#accName').val();
-		var newtel = $('#accTel').val();
-		var email = $('#accMail').val();
-		var pwd = $('#accPwd').val();
+		nom = $('#accName').val();
+		newtel = $('#accTel').val();
+		email = $('#accMail').val();
+		pwd = $('#accPwd').val();
 		$("#accReturns").empty();
 		$.post("https://ssl14.ovh.net/~taxibleu/mytaxisrv/modmy_app.php", { nom: nom, tel: tel, newtel: newtel, email: email, pwd: pwd}, function(data) {
 			$.localStorage.setItem('nom', data.nom);
@@ -373,9 +375,9 @@
 		});
 	});
 	$( '#account' ).live( 'pagecreate',function(event){
-		var nom = $.localStorage.getItem('nom');
-		var tel = $.localStorage.getItem('tel');
-		var email = $.localStorage.getItem('email');
+		nom = $.localStorage.getItem('nom');
+		tel = $.localStorage.getItem('tel');
+		email = $.localStorage.getItem('email');
 		$('#accName').val(nom);
 		$('#accMail').val(email);
 		$('#accTel').val(tel);
@@ -588,8 +590,8 @@
                 $("#next-box").show("medium");
             }
         }, 1000);
-		var nom = $.localStorage.getItem('nom');
-		var tel = $.localStorage.getItem('tel');
+		nom = $.localStorage.getItem('nom');
+		tel = $.localStorage.getItem('tel');
 		$('#Accurate').val(nom);
 		$('#cellular').val(tel);
 		$('.expends').click(function () {
@@ -691,7 +693,7 @@
 		$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide", reverse: true} );
 	}
 	$('#map_page').live('pagecreate', function() {
-        var getback = setTimeout( function () {
+        endcourse = setTimeout( function () {
             $("#cancel").trigger('click');
         }, 180000);
 		//$('#dblinks').empty();
@@ -750,8 +752,8 @@
 				if (stoper != 1) {$('#dblinks #' + index).trigger('click');}
 				if ((index > 5) || (stoper == 1)) {
 					// THIS ONE IS THE 0000 CAB AND LAST ONE SO...
-					clearInterval(time);
-                    clearTimeout(endcourse); // Clears the current timeout
+					clearInterval(time); // Clears the current Interval
+                    //clearTimeout(endcourse);
 					//alert('Aucun taxi ne prend la course !!');
 					//return false;
 				}
@@ -1029,16 +1031,21 @@
 		clearInterval(time);
 		clearTimeout(endcourse);
 		cancel(idcourse);
-		//$('#map').gmap('destroy');
-		//$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide", reverse: true} );
+		$('#map').gmap('destroy');
 		$( "#backPop" ).popup( "open", { positionTo: "window" } );
 		var wait2getBack = setTimeout( function () {
-			document.location.href='index.html';
-		}, 2000);
+			//document.location.href='index.html';
+			$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
+		}, 1000);
 	}
     function goback(flag)
     {
-        document.location.href=flag;
+		$('#dblinks').empty();	 
+		clearInterval(time);
+		clearTimeout(endcourse);
+		$('#map').gmap('destroy');
+        //document.location.href=flag;
+		$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
     }        
     function processMap()
     {
