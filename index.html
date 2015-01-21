@@ -85,10 +85,6 @@
 
 	////////////////////////////////////////////////////////////
 	
-	 <!-- These are the notifications that are displayed to the user through pop-ups if the above JS files does not exist in the same directory-->
-	//if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
-	//if (typeof CDV == 'undefined') alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
-	//if (typeof FB == 'undefined') alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
 	// Checks App or Browser
 	app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 && document.URL.indexOf("localhost") != 7;
 	if ( app ) {
@@ -109,12 +105,6 @@
 				locateMe();
 			}, 1000);
 			scanner = cordova.require("cordova/plugin/BarcodeScanner");
-			try {
-				FB.init({ appId: "1488204401415966", nativeInterface: CDV.FB, useCachedDialogs: false });
-				//document.getElementById('data').innerHTML = "";
-			} catch (e) {
-				navigator.notification.alert(e);
-			}
 		}
 		// GESTION DES BOUTONS MATERIEL
 		// Bouton retour
@@ -219,10 +209,24 @@
 		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 	}
 	function fbLogin() {
-		FB.login(function(response) {
-			if (response.status === 'connected') {
-				 FB.api('/me', function(response) {
-					//document.getElementById('data').innerHTML = "Good to see you, fr&egrave;re : " + response.name + "."+response.email + " - "+response.age_range + " - bDay = "+response.birthday + " - "+response.gender + " - "+response.work + " - "+response.website+ " - "+response.link + " - "+response.quotes;
+		/*
+         if (!app) { // WebApp only needs init
+             facebookConnectPlugin.browserInit('1488204401415966');
+         }
+         facebookConnectPlugin.login(["email"], function(response) {
+             if (response.authResponse) {
+                 facebookConnectPlugin.api('/me', null,
+                     function(response) {
+                         alert('Good to see you, ' +
+                             response.email + response.name + '.');
+                     });
+
+             }
+         });
+		*/
+		facebookConnectPlugin.login(["email"], function(response) {
+			if (response.authResponse) {
+				facebookConnectPlugin.api('/me', null, function(response) {
 					$.localStorage.setItem('nom', response.name);
 					$.localStorage.setItem('email', response.email);
 					$('#subName').val(response.name);
@@ -249,12 +253,11 @@
 							$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide"} );
 						}
 					}, "json");
-				 });
-				//navigator.notification.alert('logged in');
+				});
 			} else {
 				navigator.notification.alert('ECHEC IDENTIFICATION');
 			}
-		},{ scope: "email" });
+		});
 	}
 	function dc() {
 		$.localStorage.setItem('registeredUser', 0);
