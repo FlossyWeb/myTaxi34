@@ -76,7 +76,7 @@
 	var operator = $.localStorage.getItem('operator');
 	var dontReg = false;
 	var mobileMap = { 'center': '43.609, 3.88', 'zoom': 12 };
-	var isPlaceChanged = false;
+	var isPlaceChanged = true; // Assuming geolocation will get zip unless address is tipped at last
 
 	// Scanner
 	var scanner;
@@ -100,6 +100,9 @@
 			if($.localStorage.getItem('registeredUser') != 1)
 			{
 				$.mobile.pageContainer.pagecontainer("change", "#connect", { transition: "slide"} );
+			}
+			if((navigator.network.connection.type == Connection.NONE) || !window.jQuery){
+				$("body").empty().append('<img src="no_network.png" width="'+screen.width+'" height="'+screen.height+'" onClick="window.location.reload()" />');
 			}
 			setTimeout(function() { 
 				locateMe();
@@ -236,6 +239,11 @@
 						$.localStorage.setItem('email', data.email);
 						$.localStorage.setItem('tel', data.tel);
 						$.localStorage.setItem('operator', data.operator);
+						// Refresh Script Vars
+						nom = data.nom;
+						tel = data.tel;
+						email = data.email;
+						operator = data.operator;
 						if (data.badid)
 						{
 							$.mobile.pageContainer.pagecontainer("change", "#subscription", { transition: "slide"} );
@@ -271,6 +279,11 @@
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('tel', data.tel);
 			$.localStorage.setItem('operator', data.operator);
+			// Refresh Script Vars
+			nom = data.nom;
+			tel = data.tel;
+			email = data.email;
+			operator = data.operator;
 			if (!data.pass)
 			{
 				display = '<p style="color:red;"><b>Les identifiant et mot de passe fournis ne sont pas corrects.</b></p>';
@@ -295,6 +308,11 @@
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('tel', data.tel);
 			$.localStorage.setItem('operator', data.operator);
+			// Refresh Script Vars
+			nom = data.nom;
+			tel = data.tel;
+			email = data.email;
+			operator = data.operator;
 			if (data.subscribed === true)
 			{
 				//navigator.notification.alert(data.subscribed+' '+data.telexist+' '+data.telvalid+' '+data.emailvalid);
@@ -333,7 +351,10 @@
 			$.localStorage.setItem('nom', data.nom);
 			$.localStorage.setItem('email', data.email);
 			$.localStorage.setItem('tel', data.tel);
-			
+			// Refresh Script Vars
+			nom = data.nom;
+			tel = data.tel;
+			email = data.email;
 			if (data.modmy == 1)
 			{
 				display = '<p style="color:green;"><b>Vous avez bien modifi&eacute; votre compte.</b></p><br>';
@@ -456,12 +477,13 @@
 		dep = $.sessionStorage.getItem('dep');
 		//navigator.notification.alert(dep);
 		if (isPlaceChanged || (dep != '') || (zip != '')) {
+			$('#booking').prop('disabled', true).addClass('ui-disabled'); // If ok disable btn to prevent multiple tap
 			var myDate = new Date();
 			idcourse = myDate.getTime();
 			//var radius = document.getElementById('radiusSelect').value;
 			var rdvpoint = document.getElementById("addressInput").value;
 			var room = document.getElementById("Accurate").value;
-			var operator = $.localStorage.getItem('operator');
+			operator = $.localStorage.getItem('operator');
 			var hostname = document.getElementById("hostname").value;
 			var howMany = document.getElementById("howMany").value;
 			var typecar = document.getElementById("CarType").value;
@@ -535,6 +557,7 @@
 				else {
 					$.mobile.pageContainer.pagecontainer("change", "#book_page", { transition: "slide"} );
 				}
+				$('#booking').prop('disabled', false).removeClass('ui-disabled');
 			}, "json");
 		}
 		else {
@@ -662,8 +685,8 @@
 			});
 		}
         var ok = setInterval( function () {
-            var name_filled = document.getElementById('Accurate').value;
-            var cell_filled = document.getElementById('cellular').value;
+            var name_filled = document.getElementById("Accurate").value;
+            var cell_filled = document.getElementById("cellular").value;
 			var when = document.getElementById("when").value;
 			var date = document.getElementById("date").value;
             
@@ -778,12 +801,14 @@
 		dontReg = true;
 	}
 	function checkZip(pageToGo) {
+		$('#search').prop('disabled', true).addClass('ui-disabled'); // Prevents from multitap
 		if (isPlaceChanged || (zip != '')) {
 			$.mobile.pageContainer.pagecontainer("change", pageToGo, { transition: "slide", reverse: true} );
 		}
 		else {
 			//navigator.notification.alert('No Zip Code Here !!');
 			$( "#setZip" ).popup( "open", { positionTo: "window" } );
+			$('#search').prop('disabled', false).removeClass('ui-disabled'); // Prevents from multitap
 		}
 	}
 	function setZip() {
@@ -791,6 +816,7 @@
 		$.mobile.pageContainer.pagecontainer("change", "#infos", { transition: "slide", reverse: true} );
 	}
 	$('#map_page').live('pagecreate', function() {
+		$('#search').prop('disabled', false).removeClass('ui-disabled');
         endcourse = setTimeout( function () {
             $("#cancel").trigger('click');
         }, 180000);
@@ -978,7 +1004,7 @@
 		//var radius = document.getElementById('radiusSelect').value;
 		var rdvpoint = document.getElementById("addressInput").value;
 		var room = document.getElementById("Accurate").value;
-		var operator = $.localStorage.getItem('operator');
+		operator = $.localStorage.getItem('operator');
 		var hostname = document.getElementById("hostname").value;
 		var howMany = document.getElementById("howMany").value;
 		var typecar = document.getElementById("CarType").value;
@@ -1508,7 +1534,7 @@
                 <input type="hidden" id="modId" size="20" value=""/>
                 <input type="hidden" id="modDep" size="2" value=""/>
 				<div id="resmod"></div>
-                <button onClick="bookingMod()" class="ui-btn ui-btn-b ui-shadow ui-corner-all ui-btn-icon-left ui-icon-clock" id="booking">Modifier la r&eacute;servation</button>
+                <button onClick="bookingMod()" class="ui-btn ui-btn-b ui-shadow ui-corner-all ui-btn-icon-left ui-icon-clock" id="bookingMod">Modifier la r&eacute;servation</button>
             </div>
             </center>
         </div>
