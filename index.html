@@ -1239,7 +1239,7 @@
         <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-power" onClick="dc()">D&eacute;connexion</button>
     </div><!-- /panel -->
     <div data-role="page" data-theme="c" id="infos">
-        <div data-role="header" data-position="fixed" style="background:none;">
+        <div data-role="header" data-position="fixed" class="header">
 			<table width="100%" border="0">
 				<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
 				<tbody>
@@ -1254,7 +1254,7 @@
 				</td></tr>
 				</tbody>
 			</table>
-       </div>
+		</div>
         <div class="ui-content" role="main">
             <center>
             <div style="padding:1em; margin-top:1em; display:block;">
@@ -1393,7 +1393,7 @@
 				</div>
 			</div>
         </div>
-        <div data-role="footer" id="footer_map" data-position="fixed" data-fullscreen="true">
+        <div data-role="footer" id="footer_map" data-fullscreen="true">
 			<div id="deliv-hide" style="width: 0px; height: 0px; visibility:hidden;">
 				<input type="button" onClick="" id="deliver" value="" />
 			</div>
@@ -1406,10 +1406,25 @@
         </div>
     </div>
     <div data-role="page" data-theme="c" id="connect">
+        <div data-role="header" data-position="fixed" class="header">
+			<table width="100%" border="0">
+				<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+				<tbody>
+				<tr><td>
+					<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+				</td><td>
+					<p>&nbsp;</p>
+				</td><td align="center">
+					<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+						<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+					</a>
+				</td></tr>
+				</tbody>
+			</table>
+		</div>
         <div class="ui-content" role="main">
             <center>
-            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; margin-top:1em; display:block;">
-                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
+            <div style="padding:1em; margin-top:1em; display:block;">
                 <input type="tel" id="login" data-clear-btn="true" size="40" placeholder="Identifiant"/>
                 <input type="password" id="pwd" data-clear-btn="true" size="40" placeholder="Mot de passe"/>
                 <div id="loginReturns"></div>
@@ -1425,16 +1440,27 @@
             </div>
             </center>
         </div>
-        <div data-role="footer" id="footer_con" data-position="fixed">
+        <div data-role="footer" class="footer" id="footer_con">
             <center><input type="image" onClick="fbLogin()" src="visuels/FBconnect.png" width="90%" style="max-width:591px"/></center>
         </div>
     </div>
     <div data-role="page" data-theme="c" id="subscription">
-        <div data-role="header">
-            <a href="#connect" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-back"><p style="font-size:16px"><b>Retour</b></p></a>
-        </div>
+        <div data-role="header" data-position="fixed" class="header">
+			<table width="100%" border="0">
+				<thead><tr><th width="50%"></th><th width="14%"></th><th width="36%"></th></tr></thead>
+				<tbody>
+				<tr><td>
+					<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+				</td><td>
+					<p>&nbsp;</p>
+				</td><td align="center">
+					<a href="#connect" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-back"><p style="font-size:16px"><b>Retour</b></p></a>
+				</td></tr>
+				</tbody>
+			</table>
+		</div>
         <div class="ui-content" role="main">
-            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
+            <div style="padding:1em; display:block;">
             	<center>
                 <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
                 <input type="text" id="subName" data-clear-btn="true" size="40" placeholder="Nom"/>
@@ -1446,18 +1472,30 @@
                 <div id="subReturns"></div>
             </div>
         </div>
-        <div data-role="footer" id="footer_sub" data-position="fixed">
+        <div data-role="footer" class="footer" data-position="fixed" id="footer_sub">
             <center><input type="image" onClick="fbLogin()" src="visuels/FBconnect.png" width="90%" style="max-width:591px"/></center>
         </div>
     </div>
     <div data-role="page" data-theme="c" id="account">
-        <div data-role="header">
-            <a href="#homepanel" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-arrow-l"><p style="font-size:16px"><b>Menu</b></p></a>
-        </div>
+        <div data-role="header" data-position="fixed" class="header">
+			<table width="100%" border="0">
+				<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+				<tbody>
+				<tr><td>
+					<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+				</td><td>
+					<p>&nbsp;</p>
+				</td><td align="center">
+					<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+						<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+					</a>
+				</td></tr>
+				</tbody>
+			</table>
+		</div>
         <div class="ui-content" role="main">
-            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
+            <div style="padding:1em; display:block;">
             	<center>
-                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
                 <input type="tel" id="accTel" data-clear-btn="true" size="40" placeholder="Tel (Sans espace SVP)"/>
                 <input type="text" id="accName" data-clear-btn="true" size="40" placeholder="Nom"/>
                 <input type="email" id="accMail" data-clear-btn="true" size="40" placeholder="Email"/>
@@ -1467,20 +1505,32 @@
                 <div id="accReturns"></div>
             </div>
         </div>
-        <div data-role="footer" id="footer_sub" data-position="fixed">
+        <div data-role="footer" class="footer" data-position="fixed" id="footer_acc">
             <center><input type="image" onClick="fbLogin()" src="visuels/FBconnect.png" width="90%" style="max-width:591px"/></center>
         </div>
     </div>
     <div data-role="page" data-theme="c" id="history">
-        <div data-role="header">
-            <a href="#homepanel" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-arrow-l"><p style="font-size:16px"><b>Menu</b></p></a>
-            <button onClick="refreshHist()" class="ui-btn ui-btn-b ui-icon-refresh ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
-        </div>
+        <div data-role="header" data-position="fixed" class="header">
+			<table width="100%" border="0">
+				<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+				<tbody>
+				<tr><td align="center">
+					<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+				</td><td>
+					<p>&nbsp;</p>
+				</td><td align="center">
+					<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+						<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+					</a>
+				</td></tr>
+				</tbody>
+			</table>
+		</div>
         <div class="ui-content" role="main">
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
             	<center>
-                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
                 <p style="font-size:16px"><b>Historique des courses</b></p>
+				<button onClick="refreshHist()" class="ui-btn ui-btn-b ui-btn-right ui-icon-refresh ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
                 </center>
                 <div class="responsive">
                     <div class="ui-block-a"><div class="ui-body ui-body-a"><p>Courses directes</p><div id="hist_cont"></div></div></div>
@@ -1490,10 +1540,25 @@
         </div>
     </div>
     <div data-role="page" data-theme="c" id="book_page">
+        <div data-role="header" data-position="fixed" class="header">
+			<table width="100%" border="0">
+				<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
+				<tbody>
+				<tr><td>
+					<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+				</td><td>
+					<p>&nbsp;</p>
+				</td><td align="center">
+					<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
+						<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
+					</a>
+				</td></tr>
+				</tbody>
+			</table>
+		</div>
         <div class="ui-content" role="main">
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
             	<center>
-                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
                 <p><b><br><br>Votre demande a &eacute;t&eacute; prise en compte, votre taxi prendra contact avec vous par t&eacute;l&eacute;phone ou sms.<br><br>Toute l&rsquo;&eacute;quipe monTaxi 34 vous remercie.</b></p>
                 <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-back" onClick="goback('index.html')">Retour</button>
                 </center>
@@ -1501,7 +1566,7 @@
         </div>
     </div>
     <div data-role="page" data-theme="c" id="follow">
-        <div data-role="header" data-position="fixed" data-fullscreen="true">
+        <div data-role="header" data-fullscreen="true">
             <button onClick="goback('index.html')" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-power"><p style="font-size:16px"><b>Arr&ecirc;ter</b></p></button>
         </div>
         <div class="ui-content" id="follow_map" role="main">
@@ -1514,13 +1579,23 @@
         </div>
     </div>
     <div data-role="page" data-theme="c" id="rate_page">
-        <div data-role="header">
-            <a href="#homepanel" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-arrow-l"><p style="font-size:16px"><b>Menu</b></p></a>
-        </div>
+        <div data-role="header" data-position="fixed" class="header">
+			<table width="100%" border="0">
+				<thead><tr><th width="50%"></th><th width="14%"></th><th width="36%"></th></tr></thead>
+				<tbody>
+				<tr><td>
+					<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+				</td><td>
+					<p>&nbsp;</p>
+				</td><td align="center">
+					<a href="#connect" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-back"><p style="font-size:16px"><b>Retour</b></p></a>
+				</td></tr>
+				</tbody>
+			</table>
+		</div>
         <div class="ui-content" role="main">
             <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
             	<center>
-                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
                 <div id="urate"></div>
                 </center>
                 <div class="ui-bar-a ui-corner-all ui-shadow" style="padding:1em; display:block;">
@@ -1539,14 +1614,24 @@
         </div>
     </div>
 	<div data-role="page" data-theme="c" id="modbook">
-		<div data-role="header">
-            <a href="#homepanel" id="panel_poper" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-arrow-l"><p style="font-size:16px"><b>Menu</b></p></a>
-        </div>
+        <div data-role="header" data-position="fixed" class="header">
+			<table width="100%" border="0">
+				<thead><tr><th width="50%"></th><th width="14%"></th><th width="36%"></th></tr></thead>
+				<tbody>
+				<tr><td>
+					<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
+				</td><td>
+					<p>&nbsp;</p>
+				</td><td align="center">
+					<a href="#connect" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-back"><p style="font-size:16px"><b>Retour</b></p></a>
+				</td></tr>
+				</tbody>
+			</table>
+		</div>
         <div class="ui-content" role="main">
             <center>
-            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; margin-top:1em; display:block;">
+            <div style="padding:1em; margin-top:1em; display:block;">
                 <!-- <h1 class="hostname">Commander un taxi</h1> -->
-                <img src="visuels/logo.png" width="60%" style="margin-bottom:-0.6em; max-width:252px"/>
                 <table width="100%" border="0">
                 	<thead><tr><th width="90%"></th><th width="10%"></th></tr></thead>
                     <tbody>

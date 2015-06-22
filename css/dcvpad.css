@@ -11,7 +11,7 @@ body {
 	background: #333;
 	background-image: linear-gradient(to bottom, #333, #000);
 }
-.ui-overlay-c, .ui-page-theme-c, .ui-page-theme-c .ui-panel-wrapper {
+.ui-overlay-c, .ui-page-theme-c, .ui-page-theme-c .ui-panel-wrapper, .header, .footer {
 	background: url(../visuels/bg_HD.jpg) no-repeat center fixed; 
 	background-size: cover;
 	-moz-background-size: cover;
