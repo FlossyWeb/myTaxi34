@@ -1,10 +1,52 @@
 body {
 	margin: 0px;
 	padding: 0px;
-	background: #000 url(../visuels/bg.png) top left repeat-x;
+	background: url(../visuels/bg_HD.jpg) no-repeat center fixed; 
+	background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	-webkit-background-size: cover;
 }
-.ui-overlay-b, .ui-page-theme-b, .ui-page-theme-b .ui-panel-wrapper, .ui-page-theme-b .ui-body-inherit {
-	background: #000 url(../visuels/bg.png) top left repeat-x;
+.ui-panel {
+	background: #333;
+	background-image: linear-gradient(to bottom, #333, #000);
+}
+.ui-overlay-c, .ui-page-theme-c, .ui-page-theme-c .ui-panel-wrapper {
+	background: url(../visuels/bg_HD.jpg) no-repeat center fixed; 
+	background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	-webkit-background-size: cover;
+}
+.ui-page-theme-c .ui-body-inherit {
+	background: url(../visuels/bg_HD_inputs.jpg) no-repeat center fixed; 
+	background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	-webkit-background-size: cover;
+}
+@media all and (orientation: landscape) { 
+	body {
+		background: url(../visuels/bg_land_HD.jpg) no-repeat center fixed; 
+		background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		-webkit-background-size: cover;
+	}
+	.ui-overlay-c, .ui-page-theme-c, .ui-page-theme-c .ui-panel-wrapper {
+		background: url(../visuels/bg_land_HD.jpg) no-repeat center fixed; 
+		background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		-webkit-background-size: cover;
+	}
+	.ui-page-theme-c .ui-body-inherit {
+		background: url(../visuels/bg_land_HD_inputs.jpg) no-repeat center fixed; 
+		background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		-webkit-background-size: cover;
+	}
 }
 #search-box, #book-box {
 	display: none;
@@ -131,24 +173,24 @@ em {
 	color: #F00;
 }
 ::-webkit-input-placeholder {
-   color: #333;
+   color: #A6A6A6;
 }
 
 :-moz-placeholder { /* Firefox 18- */
-   color: #333;
+   color: #A6A6A6;
    opacity:  1;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
-   color: #333;
+   color: #A6A6A6;
    opacity:  1;
 }
 
 :-ms-input-placeholder {  
-   color: #333;
+   color: #A6A6A6;
 }
 input[type=text], input[type=tel], input[type=date], input[type=time] {
-	color: #000;
+	color: #FFF;
 }
 /* star rating ---------------------------- */
 .rating, .rating2, .rating3, .rating4 { float: right; }
