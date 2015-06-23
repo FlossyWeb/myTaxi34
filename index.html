@@ -1279,7 +1279,7 @@
 		</div>
         <div class="ui-content" role="main">
             <center>
-            <div style="padding:1em; margin-top:1em; display:block;">
+            <div style="margin-top:1em; display:block;">
                 <!-- <img src="visuels/logo.png" width="60%" style="margin-bottom:-0.6em; max-width:252px"/> -->
                 <input type="hidden" id="operator" size="40" value="0"/>
                 <input type="hidden" id="hostname" size="40" value=""/>
@@ -1501,7 +1501,7 @@
                 <input type="text" id="accName" data-clear-btn="true" size="40" placeholder="Nom"/>
                 <input type="email" id="accMail" data-clear-btn="true" size="40" placeholder="Email"/>
                 <input type="password" id="accPwd" data-clear-btn="true" size="40" placeholder="Mot de passe"/>
-                <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-edit" onClick="accountMod()">Modifier</button>
+                <button class="ui-btn ui-corner-all ui-shadow ui-btn-c ui-btn-icon-left ui-icon-edit" onClick="accountMod()">Modifier</button>
                 </center>
                 <div id="accReturns"></div>
             </div>
@@ -1528,12 +1528,12 @@
 			</table>
 		</div>
         <div class="ui-content" role="main">
-            <div style="padding:1em; display:block;">
+            <div style="display:block;">
 				<button onClick="refreshHist()" class="ui-btn ui-btn-b ui-btn-right ui-icon-refresh ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
             	<center>
                 <p style="font-size:16px;color:#FC0;"><b>Historique des courses</b><br><img src="visuels/dots.png" width="100%" style="max-width:1200px;"/></p>
                 </center>
-				<button class="ui-btn ui-corner-all ui-shadow ui-btn-c ui-btn-icon-left ui-icon-clock ui-btn-inline" onClick="showCont('.ui-block-a','.ui-block-b')">Courses directes</button>
+				<button class="ui-btn ui-corner-all ui-shadow ui-btn-c ui-btn-icon-left ui-icon-clock ui-btn-inline" onClick="showCont('.ui-block-a','.ui-block-b')">Commandes</button>
 				<button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-calendar ui-btn-inline" onClick="showCont('.ui-block-b','.ui-block-a')">R&eacute;servations</button>
                 <div class="responsive transpcont rounded shadow">
                     <div class="ui-block-a"><div class="ui-body">
@@ -1595,15 +1595,15 @@
 				</td><td>
 					<p>&nbsp;</p>
 				</td><td align="center">
-					<a href="#connect" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-back"><p style="font-size:16px"><b>Retour</b></p></a>
+					<a href="#history" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-back"><p style="font-size:16px"><b>Retour</b></p></a>
 				</td></tr>
 				</tbody>
 			</table>
 		</div>
         <div class="ui-content" role="main">
-            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
+            <div style="display:block;">
             	<center>
-                <div id="urate"></div>
+                <div id="urate" style="font-weight:bold;color: #FC0;"></div>
                 </center>
                 <div class="ui-bar-a ui-corner-all ui-shadow" style="padding:1em; display:block;">
                     Accueil :
@@ -1616,7 +1616,7 @@
                     <div class="rating4" data-rating-max="5"></div><div class="spacer"></div>
                 </div>
                 <center><div id="rateBack"></div></center>
-                <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="rating()">Envoyer</button>
+                <button class="ui-btn ui-corner-all ui-shadow ui-btn-c ui-btn-icon-left ui-icon-check" onClick="rating()">Envoyer</button>
             </div>
         </div>
     </div>
@@ -1630,7 +1630,7 @@
 				</td><td>
 					<p>&nbsp;</p>
 				</td><td align="center">
-					<a href="#connect" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-back"><p style="font-size:16px"><b>Retour</b></p></a>
+					<a href="#history" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-back"><p style="font-size:16px"><b>Retour</b></p></a>
 				</td></tr>
 				</tbody>
 			</table>
