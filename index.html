@@ -437,27 +437,49 @@
 		$('#accTel').val(tel);
 	});
 	function more(n) {
-		$('#histBlock'+n).slideToggle('slow');
+		$('#histBlock'+n).slideToggle('slow', function() {
+			// Animation complete.
+			if($('#histBlock'+n).css("display")=='none') {
+				$('#hbtn'+n).removeClass('ui-icon-minus').addClass('ui-icon-plus');
+			}
+			else {
+				$('#hbtn'+n).removeClass('ui-icon-plus').addClass('ui-icon-minus');
+			}
+		});
 	}
 	function moreb(n) {
-		$('#bookBlock'+n).slideToggle('slow');
+		$('#bookBlock'+n).slideToggle('slow', function() {
+			if($('#bookBlock'+n).css("display")=='none') {
+				$('#bbtn'+n).removeClass('ui-icon-minus').addClass('ui-icon-plus');
+			}
+			else {
+				$('#bbtn'+n).removeClass('ui-icon-plus').addClass('ui-icon-minus');
+			}
+		});
 	}
 	function refreshHist() {
 		$.mobile.loading( "show" );
-		$.post("https://www.mytaxiserver.com/mytaxisrv/history.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 1}, function(data){
+		$.post("https://www.mytaxiserver.com/mytaxisrv/history_v2.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 1}, function(data){
 			$("#hist_cont").empty().append(data);
 		}).done(function() { 
-			$.post("https://www.mytaxiserver.com/mytaxisrv/history.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 0}, function(data){
+			$.post("https://www.mytaxiserver.com/mytaxisrv/history_v2.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 0}, function(data){
 				$("#book_cont").empty().append(data);
 			}).done(function() { $.mobile.loading( "hide" ); });
 		});
 	}
+	function showCont(cont2show, cont2hide) {
+		if($(window).width()<=1006) {
+			// Only hides cont if conts are not both displayed, see css breakpoint
+			$(cont2hide).hide();
+			$(cont2show).show();
+		}
+	}
 	$( '#history' ).live( 'pagecreate',function(event){
 		$.mobile.loading( "show" );
-		$.post("https://www.mytaxiserver.com/mytaxisrv/history.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 1}, function(data){
+		$.post("https://www.mytaxiserver.com/mytaxisrv/history_v2.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 1}, function(data){
 			$("#hist_cont").empty().append(data);
 		}).done(function() { 
-			$.post("https://www.mytaxiserver.com/mytaxisrv/history.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 0}, function(data){
+			$.post("https://www.mytaxiserver.com/mytaxisrv/history_v2.php", { tel: tel, pass: 1, dep: '34', operator: operator, hist: 0}, function(data){
 				$("#book_cont").empty().append(data);
 			}).done(function() { $.mobile.loading( "hide" ); });
 		});
@@ -1230,9 +1252,9 @@
     <div data-role="panel" id="homepanel" data-position="right" data-display="reveal">
         <!-- panel content goes here -->
         <ul data-role="listview" data-inset="true" data-theme="c">
-          <li><a href="#infos" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Accueil</b></a></li>
-          <li><a href="#history" class="ui-btn ui-btn-icon-left ui-icon-bars">Historique</a></li>
-          <li><a href="#account" class="ui-btn ui-btn-icon-left ui-icon-user">Mon compte</a></li>
+          <li><a href="#infos" class="ui-btn ui-btn-icon-left ui-icon-home"><b>Commander</b></a></li>
+          <li><a href="#history" class="ui-btn ui-btn-icon-left ui-icon-bars"><b>Historique</b></a></li>
+          <li><a href="#account" class="ui-btn ui-btn-icon-left ui-icon-user"><b>Mon compte</b></a></li>
           <li><a href="#" onClick="Share()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-mail noAppHide"><b>Partager l&rsquo;app</b></a></li>
           <li><a href="#" onClick="goScan()" data-transition="slide" class="ui-btn ui-btn-icon-left ui-icon-camera noAppHide"><b>Scanner un code</b></a></li>
         </ul>
@@ -1268,25 +1290,29 @@
                 	<thead><tr><th width="90%"></th><th width="10%"></th></tr></thead>
                     <tbody>
                 	<tr><td>
-                        <input type="text" id="addressInput" data-clear-btn="true" size="40" placeholder="Adresse RDV" width="90%"/>
-                    </td><td>
-                        <button onClick="locateMe()" class="ui-btn ui-btn-c ui-icon-location ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
+                        <input type="text" id="addressInput" data-clear-btn="true" size="40" placeholder="Adresse RDV" width="90%" style="min-height:3em;"/>
+                    </td><td align="center">
+						<img src="visuels/ico_geolocalisation.png" width="100%" class="cursor" onClick="locateMe()" style="max-width:40px;"/>
+                        <!-- <button onClick="locateMe()" class="ui-btn ui-btn-c ui-icon-location ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button> -->
                     </td></tr>
                 <input type="hidden" id="DestAddress" size="10" value="DESTINATION"/>
                 	<tr><td>
-                        <input type="text" id="Accurate" data-clear-btn="true" class="mustHave" size="32" placeholder="Nom *"/>
-                    </td><td>
-                        <button onClick="getContact()" class="ui-btn ui-btn-c ui-icon-edit ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
+                        <input type="text" id="Accurate" data-clear-btn="true" class="mustHave" size="32" placeholder="Nom *" style="min-height:3em;"/>
+                    </td><td align="center">
+						<img src="visuels/ico_modif.png" width="100%" class="cursor" onClick="getContact()" style="max-width:45px;"/>
+                        <!-- <button onClick="getContact()" class="ui-btn ui-btn-c ui-icon-edit ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button> -->
                     </td></tr>
                 	<tr><td>
-                        <input type="tel" id="cellular" data-clear-btn="true" class="mustHave" size="20" placeholder="Tel *"/>
-                    </td><td>
-                        <a href="#rememberMe" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-c ui-icon-heart ui-shadow-icon ui-btn-icon-notext ui-corner-all"></a>
+                        <input type="tel" id="cellular" data-clear-btn="true" class="mustHave" size="20" placeholder="Tel *" style="min-height:3em;"/>
+                    </td><td align="center">
+                        <a href="#rememberMe" data-rel="popup" data-position-to="window">
+							<img src="visuels/ico_favori.png" width="100%" class="cursor" onClick="locateMe()" style="max-width:50px;"/>
+						</a>
                     </td></tr>
                     </tbody>
                 </table>
                 <!-- <p style="font-size:small;"><em>*</em> Ces informations sont obligatoires</p> -->
-                <p class="expends">D&eacute;tails<br><img src="visuels/dots.png" width="100%" style="max-width:1200px;"/></p>
+                <p class="expends"><b>D&eacute;tails</b><br><img src="visuels/dots.png" width="100%" style="max-width:1200px;"/></p>
                 <div id="details">
                     <label for="howMany">Nombre de passagers :</label>
                     <input name="howMany" id="howMany" min="1" max="8" value="1" data-theme="c" data-show-value="true" data-popup-enabled="true" type="range">
@@ -1310,7 +1336,7 @@
                     </select>
                     <textarea id="coms" placeholder="Commentaires"></textarea>
                 </div>
-                <p class="expends">Infos Resa<span style="display:block;width:100%;height:1px;"><img src="visuels/dots.png" width="100%" style="max-width:1200px;"/></span></p>
+                <p class="expends"><b>Infos Resa</b><br><img src="visuels/dots.png" width="100%" style="max-width:1200px;"/></p>
                 <div id="book">
                     <p id="datelabel"><b>Date et heure du RDV si r&eacute;servation :</b></p>
                     <span style="display:inline-block;width: 48%;">
@@ -1406,29 +1432,14 @@
         </div>
     </div>
     <div data-role="page" data-theme="c" id="connect">
-        <div data-role="header" data-position="fixed" class="header">
-			<table width="100%" border="0">
-				<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
-				<tbody>
-				<tr><td>
-					<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
-				</td><td>
-					<p>&nbsp;</p>
-				</td><td align="center">
-					<a href="#homepanel" id="panel_poper" data-role="none" style="width:90%;">
-						<img src="visuels/ico_menu.png" width="100%" style="max-width:175px;"/>
-					</a>
-				</td></tr>
-				</tbody>
-			</table>
-		</div>
         <div class="ui-content" role="main">
             <center>
             <div style="padding:1em; margin-top:1em; display:block;">
+				<img src="visuels/logo_montaxi.png" width="60%" style="max-width:512px;"/>
                 <input type="tel" id="login" data-clear-btn="true" size="40" placeholder="Identifiant"/>
                 <input type="password" id="pwd" data-clear-btn="true" size="40" placeholder="Mot de passe"/>
                 <div id="loginReturns"></div>
-                <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="login()">Connexion</button>
+                <button class="ui-btn ui-corner-all ui-shadow ui-btn-c ui-btn-icon-left ui-icon-check" onClick="login()">Connexion</button>
                 <a href="#subscription" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-user">Nouvelle Inscription</a>
                 <p style="font-size:small;"><a href="#" id="displayForgot">Mot de passe oubli&eacute;</a></p>
                 <div id="forgotForm" style="display:none;">
@@ -1446,27 +1457,17 @@
     </div>
     <div data-role="page" data-theme="c" id="subscription">
         <div data-role="header" data-position="fixed" class="header">
-			<table width="100%" border="0">
-				<thead><tr><th width="50%"></th><th width="14%"></th><th width="36%"></th></tr></thead>
-				<tbody>
-				<tr><td>
-					<img src="visuels/header.png" width="100%" style="max-width:500px;"/>
-				</td><td>
-					<p>&nbsp;</p>
-				</td><td align="center">
-					<a href="#connect" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-back"><p style="font-size:16px"><b>Retour</b></p></a>
-				</td></tr>
-				</tbody>
-			</table>
+			<a href="#connect" class="ui-btn ui-btn-icon-left ui-corner-all ui-shadow ui-icon-back"><p style="font-size:16px"><b>Retour</b></p></a>
 		</div>
         <div class="ui-content" role="main">
+			<div class="cleaner"></div>
             <div style="padding:1em; display:block;">
             	<center>
-                <img src="visuels/logo.png" width="60%" style="max-width:252px"/>
+				<img src="visuels/logo_montaxi.png" width="60%" style="max-width:512px;"/>
                 <input type="text" id="subName" data-clear-btn="true" size="40" placeholder="Nom"/>
                 <input type="email" id="subMail" data-clear-btn="true" size="40" placeholder="Email"/>
                 <input type="tel" id="subTel" data-clear-btn="true" size="40" placeholder="Tel (Sans espace SVP)"/>
-                <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="subscribe()">Inscription</button>
+                <button class="ui-btn ui-corner-all ui-shadow ui-btn-c ui-btn-icon-left ui-icon-check" onClick="subscribe()">Inscription</button>
                 </center>
                 <div id="data"></div>
                 <div id="subReturns"></div>
@@ -1527,14 +1528,20 @@
 			</table>
 		</div>
         <div class="ui-content" role="main">
-            <div class="ui-bar-b ui-corner-all ui-shadow" style="padding:1em; display:block;">
-            	<center>
-                <p style="font-size:16px"><b>Historique des courses</b></p>
+            <div style="padding:1em; display:block;">
 				<button onClick="refreshHist()" class="ui-btn ui-btn-b ui-btn-right ui-icon-refresh ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
+            	<center>
+                <p style="font-size:16px;color:#FC0;"><b>Historique des courses</b><br><img src="visuels/dots.png" width="100%" style="max-width:1200px;"/></p>
                 </center>
-                <div class="responsive">
-                    <div class="ui-block-a"><div class="ui-body ui-body-a"><p>Courses directes</p><div id="hist_cont"></div></div></div>
-                    <div class="ui-block-b"><div class="ui-body ui-body-b"><p>R&eacute;servations</p><div id="book_cont"></div></div></div>
+				<button class="ui-btn ui-corner-all ui-shadow ui-btn-c ui-btn-icon-left ui-icon-clock ui-btn-inline" onClick="showCont('.ui-block-a','.ui-block-b')">Courses directes</button>
+				<button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-calendar ui-btn-inline" onClick="showCont('.ui-block-b','.ui-block-a')">R&eacute;servations</button>
+                <div class="responsive transpcont rounded shadow">
+                    <div class="ui-block-a"><div class="ui-body">
+						<div id="hist_cont"></div>
+					</div></div>
+                    <div class="ui-block-b"><div class="ui-body">
+						<div id="book_cont"></div>
+					</div></div>
                 </div>
             </div>
         </div>

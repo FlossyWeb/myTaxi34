@@ -11,6 +11,10 @@ body {
 	background: #333;
 	background-image: linear-gradient(to bottom, #333, #000);
 }
+.transpcont {
+    background: #333;
+	background-color: rgba(60,60,60,0.6);
+}
 .ui-overlay-c, .ui-page-theme-c, .ui-page-theme-c .ui-panel-wrapper, .header, .footer {
 	background: url(../visuels/bg_HD.jpg) no-repeat center fixed; 
 	background-size: cover;
@@ -33,7 +37,7 @@ body {
 		-o-background-size: cover;
 		-webkit-background-size: cover;
 	}
-	.ui-overlay-c, .ui-page-theme-c, .ui-page-theme-c .ui-panel-wrapper {
+	.ui-overlay-c, .ui-page-theme-c, .ui-page-theme-c .ui-panel-wrapper, .header, .footer {
 		background: url(../visuels/bg_land_HD.jpg) no-repeat center fixed; 
 		background-size: cover;
 		-moz-background-size: cover;
@@ -72,6 +76,22 @@ ul, li {
 	clear: both;
 	height: 6px;
 	overflow: hidden;
+}
+.rounded {
+	-moz-border-radius: 6px;
+	border-radius: 6px;	
+}
+.rounded16 {
+	-moz-border-radius: 16px;
+	border-radius: 16px;
+}
+.shadow {
+	box-shadow: 0 0 6px #000;
+	-moz-box-shadow: 0 0 6px #000; 
+	-webkit-box-shadow: 0 0 6px #000;
+}
+.cursor {
+	cursor: pointer;
 }
 #left {
 	color: #FFF;
@@ -124,15 +144,22 @@ ul, li {
     width: 100%;
     float: none;
 }
+/* Stack all blocks to start */
+.responsive .ui-block-b{
+	display: none;
+}
 /* Collapsing borders */
 .responsive > div + div .ui-body {
     border-top-width: 0;
 }
 /* 1st breakpoint - Float A and B, leave A full width on top */
-@media all and (min-width: 32em) {
+@media all and (min-width: 1024px) {
     .responsive {
         overflow: hidden; /* Use this or a "clearfix" to give the container height */
     }
+	.responsive .ui-block-b{
+		display: inline-block;
+	}
     .responsive .ui-body {
        min-height: 14em;
     }
