@@ -39,7 +39,7 @@
 			$.mobile.loader.prototype.options.text = "Veuillez patienter pendant la recherche de taxi disponible. Merci de votre confiance !";
 			$.mobile.loader.prototype.options.textVisible = "true";
 			$.mobile.loader.prototype.options.theme = "a";
-			$.mobile.loader.prototype.options.html = '<span class="ui-bar ui-overlay-c ui-corner-all"><center><img src="visuels/preload_world.gif"/><br><span style="color:#F00;">Veuillez patienter pendant la recherche de taxis disponibles</span><br>Merci de votre confiance !</center></span>';
+			$.mobile.loader.prototype.options.html = '<span class="ui-bar ui-overlay-a ui-corner-all"><center><img src="visuels/preload_world.gif"/><br><span style="color:#F00;">Veuillez patienter pendant la recherche de taxis disponibles</span><br>Merci de votre confiance !</center></span>';
         });
     </script>    
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -128,7 +128,7 @@
 		function onBackKeyDown() {
 			//history.back();
 			//changePage('#infos');
-			navigator.notification.alert('Veuillez ne pas quitter monTaxi pendant la recheche de taxi disponibles');
+			navigator.notification.alert("Veuillez ne pas quitter monTaxi pendant la recheche de taxi disponibles", alertDismissed, 'MonTaxi', 'OK');
 		}
 		// Bouton menu
 		//function onMenuKeyDown() {}
@@ -193,17 +193,17 @@
 				var number = result.phoneNumber;
 				var message = "Téléchargez l'app monTaxi 34 en suivant ce lien : http://www.taximedia.fr/stores.php?app=mytaxi&dep=34";
 				var intent = ""; //leave empty for sending sms using default intent
-				var success = function () {
+				var smsSuccess = function () {
 					//navigator.notification.alert('Message sent successfully');
 					$('#smsReturn').empty().append('Message envoy&eacute; avec succ&egrave;s, Merci');
 					$( "#popSms" ).popup( "open", { positionTo: "window" } );
 				};
-				var error = function (e) {
+				var smsError = function (e) {
 					//navigator.notification.alert('Message Failed:' + e); 
 					$('#smsReturn').empty().append('Probl&egrave;me lors de l&rsquo;envoi du message: ' + e);
 					$( "#popSms" ).popup( "open", { positionTo: "window" } );
 				};
-				sms.send(number, message, intent, success, error);
+				sms.send(number, message, intent, smsSuccess, smsError);
 			},500);
 		};
 		var failedCallbackPick = function(result){
