@@ -11,19 +11,12 @@ body {
 	background: #333;
 	background-image: linear-gradient(to bottom, #333, #000);
 }
-.transpcont {
+.transpcont, .ui-page-theme-c .ui-body-inherit {
     background: #333;
 	background-color: rgba(60,60,60,0.6);
 }
-.ui-overlay-c, .ui-page-theme-c, .ui-page-theme-c .ui-panel-wrapper, .header, .footer {
-	background: url(../visuels/bg_HD.jpg) no-repeat center fixed; 
-	background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	-webkit-background-size: cover;
-}
-.ui-page-theme-c .ui-body-inherit {
-	background: url(../visuels/bg_HD_inputs.jpg) no-repeat center fixed; 
+.ui-overlay-c, .ui-page-theme-c, .ui-page-theme-c .ui-panel-wrapper, .header {
+	background: url(../visuels/bg_HD.jpg) no-repeat center fixed;
 	background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -37,15 +30,8 @@ body {
 		-o-background-size: cover;
 		-webkit-background-size: cover;
 	}
-	.ui-overlay-c, .ui-page-theme-c, .ui-page-theme-c .ui-panel-wrapper, .header, .footer {
+	.ui-overlay-c, .ui-page-theme-c, .ui-page-theme-c .ui-panel-wrapper, .header {
 		background: url(../visuels/bg_land_HD.jpg) no-repeat center fixed; 
-		background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		-webkit-background-size: cover;
-	}
-	.ui-page-theme-c .ui-body-inherit {
-		background: url(../visuels/bg_land_HD_inputs.jpg) no-repeat center fixed; 
 		background-size: cover;
 		-moz-background-size: cover;
 		-o-background-size: cover;
