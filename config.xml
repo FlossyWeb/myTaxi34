@@ -38,7 +38,7 @@
 		<string>CELA PERMETTRA AUX TAXIS DE CONNAITRE VOTRE POSITION.</string>
 	</gap:config-file>
 	<gap:plugin name="cordova-plugin-statusbar" source="npm" />
-	<!-- <gap:plugin name="cordova-plugin-whitelist" source="npm" /> -->
+	<gap:plugin name="cordova-plugin-whitelist" source="npm" version="1.0.0" />
 	<gap:plugin name="com.phonegap.plugins.facebookconnect" version="0.9.0">
 		<param name="APP_ID" value="1488204401415966" />
 		<param name="APP_NAME" value="myTaxi34" />
@@ -63,7 +63,7 @@
 	<gap:splash src="splash/ios/Default_iphone6.png" gap:platform="ios" width="750" height="1334" />
 	<gap:splash src="splash/ios/Default_iphone6plus.png" gap:platform="ios" width="1242" height="2208" />
     
-	<!-- <allow-navigation href="*" /> -->
+	<allow-navigation href="*" />
 	<access origin="*" />
 	
 </widget>
