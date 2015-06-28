@@ -49,6 +49,7 @@
     <script src="sms.js"></script>
     <script src="cdv-plugin-fb-connect.js"></script>
     <script src="facebook-js-sdk.js"></script>
+    <script type="text/javascript" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <script type="text/javascript" src="js/jquery.html5storage.min.js"></script>
     <script type="text/javascript" src="js/jsimple-star-rating.min.js"></script>
     <script type="text/javascript" src="js/jqm-datebox-1.4.5.min.js"></script>
@@ -236,10 +237,10 @@
 		window.plugins.contactNumberPicker.pick(successCallbackPick,failedCallbackPick);
 	}
 	function fbLogin() {
-		/*
          if (!app) { // WebApp only needs init
-             facebookConnectPlugin.browserInit('1488204401415966');
+             facebookConnectPlugin.browserInit('349841341865550');
          }
+		/*
          facebookConnectPlugin.login(["email"], function(response) {
              if (response.authResponse) {
                  facebookConnectPlugin.api('/me', null,
@@ -1250,6 +1251,7 @@
     </script>
     </head>
     <body style="margin:0px; padding:0px;">
+	<div id="fb-root"></div>
     <div data-role="panel" id="homepanel" data-position="right" data-display="reveal">
         <!-- panel content goes here -->
         <ul data-role="listview" data-inset="true" data-theme="c">
