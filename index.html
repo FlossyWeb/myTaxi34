@@ -741,13 +741,17 @@
 			$('.noAppHide').each(function () {
 				$(this).hide();
 			})
+			$('#date').prop('type', 'text');
+			$('#when').prop('type', 'text');
 			$('#date').datebox({
 				mode: "calbox",
-				afterToday: true
+				afterToday: true,
+				useFocus: true
 			});
 			$('#when').datebox({
 				mode: "timebox",
-				overrideTimeOutput: "%k:%M"
+				overrideTimeOutput: "%k:%M",
+				useFocus: true
 			});
 		}
         var ok = setInterval( function () {
@@ -814,6 +818,7 @@
 			{
 				if (results[0]) {
 					$('#addressInput').val(results[0].formatted_address);
+					$('#addressInput2').val(results[0].formatted_address);
 					for(var i=0; i < results[0].address_components.length; i++)
 					{
 						var component = results[0].address_components[i];
@@ -824,37 +829,47 @@
 					}
 				}
 				else {
-					navigator.notification.alert('No results found');
+					if(app) navigator.notification.alert('Adresse inconnue !!', alertDismissed, 'MonTaxi', 'OK');
+					else alert('Adresse inconnue !!');
 				}
 			}
 			else {
-				navigator.notification.alert('Geocoder failed due to: ' + status);
+				if(app) navigator.notification.alert('Geocoder failed due to: ' + status, alertDismissed, 'MonTaxi', 'OK');
+				else alert('Geocoder failed due to: ' + status);
 			}
 		});
 	}
 	function showError(error)
 	{
 		var x=document.getElementById("resultsGeo");
+		var geoAlert="";
 		switch(error.code) 
 		{
 			case error.PERMISSION_DENIED:
 			  x.innerHTML="<strong>Vous avez refus&eacute; l&rsquo;acc&egrave;s &agrave; la G&eacute;olocalisation.</strong>"
+			  geoAlert="Vous avez refusé l'accès à la G&eacute;olocalisation, vous pouvez modifier cela dans les réglages.";
 			  break;
 			case error.POSITION_UNAVAILABLE:
 			  x.innerHTML="<strong>G&eacute;olocalisation indisponible, veuillez regarder dans l&rsquo;aide ou activer le service dans les reglages de votre appareil.</strong>"
+			  geoAlert="Géolocalisation indisponible, veuillez regarder dans l&rsquo;aide ou activer le service dans les reglages de votre appareil.";
 			  break;
 			case error.TIMEOUT:
 			  x.innerHTML="<strong>La demande de G&eacute;olocalisation a expir&eacute;(user location request timed out).</strong>"
+			  geoAlert="La demande de Géolocalisation a expir&eacute;(user location request timed out).";
 			  break;
 			case error.UNKNOWN_ERROR:
 			  x.innerHTML="<strong>Erreur inconnue de G&eacute;olocalisation (unknown error occurred).</strong>"
+			  geoAlert="Erreur inconnue de Géolocalisation (unknown error occurred).";
 			  break;
 			default:
 			  x.innerHTML="<strong>Erreur de G&eacute;olocalisation, red&eacute;marrage du smartphone n&eacute;c&eacute;ssaire.</strong>"
+			  geoAlert="Erreur de Géolocalisation, libre à vous d'activer le service de géolocalisation pour cette app dans les réglages.";
 		}
 		// Fall back to no options and try again for Android to work.
 		navigator.geolocation.getCurrentPosition(codeLatLng, function(){
-			$( "#errorPop" ).popup( "open", { positionTo: "window" } );
+			//$( "#errorPop" ).popup( "open", { positionTo: "window" } );
+			if(app) navigator.notification.alert(geoAlert, alertDismissed, 'MonTaxi', 'OK');
+			else alert(geoAlert);
 		});
 	}			  
 	function Fillin(Name, Cell)
@@ -903,7 +918,7 @@
 						//$.mobile.loading( "hide" );
 					}, 2000);
 					
-					var userIcon = 'visuels/blue_marker.png';
+					var userIcon = 'visuels/client_loc_icon.png';
 					self.get('map').panTo(myPlace);
 					//self.get('map').setZoom(12);
 					//self.get('map').setCenter(myPlace);
@@ -982,7 +997,7 @@
 			navigator.geolocation.getCurrentPosition(function(position, status) {
 				var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
 				self.get('map').panTo(latlng);
-				var userIcon = 'visuels/blue_marker.png';
+				var userIcon = 'visuels/client_loc_icon.png';
 				self.addMarker({ id: 'you', 'position': latlng, 'bounds': true, 'icon': userIcon }).click(function() {
 					self.openInfoWindow({ 'content':  '<p style="color:#09F;"><b>Vous &Ecirc;tes ici</b></p>' }, this);
 				});
@@ -1019,7 +1034,7 @@
 				if(data.ok) {
 					var latlng = new google.maps.LatLng(data.lat, data.lng);
 					var display_name = 'Taxi ' + data.name;
-					var cabIcon = 'visuels/cab_marker.png';
+					var cabIcon = 'visuels/taxi_loc_icon.png';
 					self.addMarker({ id: 'cab', 'position': latlng, 'bounds': true, 'title': display_name, 'icon': cabIcon }).click(function() {
 						infoCont = '<p style="color:#333;"><b>taxi n&deg; ' + data.name + ' - ' + data.address+ ' &agrave; ' + data.timestamp+ '</b></p>';
 						self.openInfoWindow({ 'content':  infoCont}, this);
@@ -1038,7 +1053,7 @@
 					markerCab.setVisible(false);
 					var latlng = new google.maps.LatLng(data.lat, data.lng);
 					var display_name = 'Taxi ' + data.name;
-					var cabIcon = 'visuels/cab_marker.png';
+					var cabIcon = 'visuels/taxi_loc_icon.png';
 					self.addMarker({ id: 'cab', 'position': latlng, 'bounds': true, 'title': display_name, 'icon': cabIcon }).click(function() {
 						infoCont = '<p style="color:#333;"><b>taxi n&deg; ' + data.name + ' - ' + data.address+ ' &agrave; ' + data.timestamp+ '</b></p>';
 						self.openInfoWindow({ 'content':  infoCont}, this);
@@ -1048,7 +1063,7 @@
 					navigator.geolocation.getCurrentPosition(function(position, status) {
 						var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
 						self.get('map').panTo(latlng);
-						var userIcon = 'visuels/blue_marker.png';
+						var userIcon = 'visuels/client_loc_icon.png';
 						self.addMarker({ id: 'you', 'position': latlng, 'bounds': true, 'icon': userIcon }).click(function() {
 							self.openInfoWindow({ 'content':  '<p style="color:#09F;"><b>Vous &Ecirc;tes ici</b></p>' }, this);
 						});
@@ -1144,7 +1159,7 @@
 				num_req = num_req+1;
 				var latlng = new google.maps.LatLng(lat2, lng2);			
 				var display_name = 'Taxi ' + name;
-				var cabIcon = 'visuels/cab_marker.png';
+				var cabIcon = 'visuels/taxi_loc_icon.png';
 				mapEvent.addMarker({ id: i ,'position': latlng, 'bounds': true, 'title': display_name, 'icon': cabIcon }).click(function() {
 					infoCont = '<p style="color:#333;"><b>Taxi n&deg; ' + name + ' est &agrave; ' + parseFloat(distance).toFixed(1) + ' Km de vous<br>tel: ' + address+ '</b></p>';
 					mapEvent.openInfoWindow({ 'content':  infoCont}, this);
@@ -1226,6 +1241,7 @@
 		clearInterval(time);
 		clearTimeout(endcourse);
 		cancel(idcourse);
+		idcourse=''; // reset idcourse
 		$('#map').gmap('destroy');
 		$( "#backPop" ).popup( "open", { positionTo: "window" } );
 		var wait2getBack = setTimeout( function () {
@@ -1265,7 +1281,7 @@
     </div><!-- /panel -->
     <div data-role="page" data-theme="c" id="infos">
         <div data-role="header" data-position="fixed" class="header">
-			<table width="100%" border="0">
+			<table width="100%" border="0" class="header_cont">
 				<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
 				<tbody>
 				<tr><td>
@@ -1388,7 +1404,7 @@
                             Veuillez saisir le code postal de la commune o&ugrave; vous vous trouvez :
                             <input type="tel" id="zipDep" data-clear-btn="true" size="5"/>
                         </p>
-                        <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" onClick="setZip()">Envoyer</button>
+                        <button class="ui-btn ui-corner-all ui-shadow ui-btn-c ui-btn-icon-left ui-icon-check" onClick="setZip()">Envoyer</button>
                     </div>
                 </div>
             </div>
@@ -1482,7 +1498,7 @@
     </div>
     <div data-role="page" data-theme="c" id="account">
         <div data-role="header" data-position="fixed" class="header">
-			<table width="100%" border="0">
+			<table width="100%" border="0" class="header_cont">
 				<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
 				<tbody>
 				<tr><td>
@@ -1515,7 +1531,7 @@
     </div>
     <div data-role="page" data-theme="c" id="history">
         <div data-role="header" data-position="fixed" class="header">
-			<table width="100%" border="0">
+			<table width="100%" border="0" class="header_cont">
 				<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
 				<tbody>
 				<tr><td>
@@ -1551,7 +1567,7 @@
     </div>
     <div data-role="page" data-theme="c" id="book_page">
         <div data-role="header" data-position="fixed" class="header">
-			<table width="100%" border="0">
+			<table width="100%" border="0" class="header_cont">
 				<thead><tr><th width="50%"></th><th width="34%"></th><th width="16%"></th></tr></thead>
 				<tbody>
 				<tr><td>
@@ -1590,7 +1606,7 @@
     </div>
     <div data-role="page" data-theme="c" id="rate_page">
         <div data-role="header" data-position="fixed" class="header">
-			<table width="100%" border="0">
+			<table width="100%" border="0" class="header_cont">
 				<thead><tr><th width="50%"></th><th width="14%"></th><th width="36%"></th></tr></thead>
 				<tbody>
 				<tr><td>
@@ -1625,7 +1641,7 @@
     </div>
 	<div data-role="page" data-theme="c" id="modbook">
         <div data-role="header" data-position="fixed" class="header">
-			<table width="100%" border="0">
+			<table width="100%" border="0" class="header_cont">
 				<thead><tr><th width="50%"></th><th width="14%"></th><th width="36%"></th></tr></thead>
 				<tbody>
 				<tr><td>
@@ -1647,20 +1663,20 @@
                     <tbody>
                 	<tr><td>
                         <input type="text" id="addressInput2" data-clear-btn="true" size="40" placeholder="Adresse RDV" width="90%"/>
-                    </td><td>
-                        <button onClick="locateMe()" class="ui-btn ui-btn-b ui-icon-location ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
+                    </td><td align="center">
+						<img src="visuels/ico_geolocalisation.png" width="100%" class="cursor" onClick="locateMe()" style="max-width:40px;"/>
                     </td></tr>
                 	<tr><td>
                         <input type="text" id="Accurate2" data-clear-btn="true" class="mustHave" size="32" placeholder="Nom *"/>
-                    </td><td>
-                        <button onClick="getContact()" class="ui-btn ui-btn-b ui-icon-edit ui-shadow-icon ui-btn-icon-notext ui-corner-all"></button>
+                    </td><td align="center">
+						<img src="visuels/ico_modif.png" width="100%" class="cursor" onClick="getContact()" style="max-width:45px;"/>
                     </td></tr>
                 	<tr><td>
                         <input type="tel" id="cellular2" data-clear-btn="true" class="mustHave" size="20" placeholder="Tel *"/>
                     </tbody>
                 </table>
                 <!-- <p style="font-size:small;"><em>*</em> Ces informations sont obligatoires</p> -->
-                <p class="expends2">D&eacute;tails<img src="visuels/lineDown.png" width="100%"/></p>
+                <p class="expends"><b>D&eacute;tails</b><br><img src="visuels/dots.png" width="100%" style="max-width:1200px;"/></p>
                 <div id="details">
                     <label for="howMany">Nombre de passagers :</label>
                     <input name="howMany" id="howMany2" min="1" max="8" value="1" data-theme="c" data-show-value="true" data-popup-enabled="true" type="range">
@@ -1691,7 +1707,7 @@
                 <input type="hidden" id="modId" size="20" value=""/>
                 <input type="hidden" id="modDep" size="2" value=""/>
 				<div id="resmod"></div>
-                <button onClick="bookingMod()" class="ui-btn ui-btn-b ui-shadow ui-corner-all ui-btn-icon-left ui-icon-clock" id="bookingMod">Modifier la r&eacute;servation</button>
+                <button onClick="bookingMod()" class="ui-btn ui-btn-c ui-shadow ui-corner-all ui-btn-icon-left ui-icon-clock" id="bookingMod">Modifier la r&eacute;servation</button>
             </div>
             </center>
         </div>
