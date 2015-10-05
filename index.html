@@ -124,6 +124,9 @@
 				locateMe();
 			}, 1000);
 			scanner = cordova.require("cordova/plugin/BarcodeScanner");
+			cordova.plugins.notification.local.clearAll(function() {
+				//alert("All notifications cleared");
+			}, this);
 		}
 		// GESTION DES BOUTONS MATERIEL
 		// Bouton retour
@@ -148,6 +151,27 @@
 				return "SI VOUS AVIEZ UNE COMMANDE EN COURS ELLE EST ANNULEE ! (CELA NE S'APPLIQUE PAS AUX RESERVATIONS)";
 			}
 		});
+	}
+	$.urlParam = function(name, url){
+		// Get parameters from an URL
+		var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(url);
+		//For current URL
+		//var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+		if (results==null){
+		   return null;
+		}
+		else{
+		   return results[1] || 0;
+		}
+	}
+	// Get params from url when called from url the scheme...
+	function handleOpenURL(url) {
+		setTimeout(function() {
+			toApp = $.urlParam('to', url); // PageToGo
+			if(toApp=='history') {
+				$.mobile.pageContainer.pagecontainer("change", "#"+toApp, { transition: "slide"} );
+			}
+		}, 600);
 	}
 	var scanSuccess = function (result) {
 		var textFormats = "QR_CODE DATA_MATRIX";
@@ -1235,15 +1259,16 @@
 				//$('#thanksResults').empty().append(data);
 				$('#answer').empty().append(data);
 				$( "#answerBox" ).popup( "open", { positionTo: "window" } );
-				/*
-				var box = confirm(data);
-				if (box == true) {
-					parent.location.href='taxipad_portal.php';
-				}
-				else {
-					parent.location.href='taxipad_portal.php';
-				}
-				*/
+				var badgeNumber = 1;
+				var toNotify = data.split("<", 1);
+				cordova.plugins.notification.local.schedule({
+					id: 1,
+					title: "MonTaxi",
+					text: toNotify,
+					led: "E7B242",
+					badge: badgeNumber,
+					data: { data:data }
+				});
 				//return false;
 			}
 		}).done(function(data) {
@@ -1434,7 +1459,7 @@
     </div>
     <div data-role="page" data-theme="c" id="map_page"">
         <div class="ui-content" role="main" id="map">
-			<div data-role="popup" data-theme="c" id="answerBox" data-dismissible="false" data-position-to="window">
+			<div data-role="popup" data-theme="c" id="answerBox" data-dismissible="false" data-position-to="window" data-overlay-theme="b">
 				<div data-theme="c" data-role="header">
 					<h1>
 						Confirmation
@@ -1445,7 +1470,7 @@
 					<input type="button" value="OK" onClick="goback('index.html')"/>
 				</div>
 			</div>
-			<div data-role="popup" data-theme="c" id="backPop" data-dismissible="false">
+			<div data-role="popup" data-theme="c" id="backPop" data-dismissible="false" data-position-to="window" data-overlay-theme="b">
 				<div data-theme="c" data-role="header">
 					<h1>
 						Annulation
